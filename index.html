@@ -2,148 +2,153 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <title>APEX PROTOCOL</title>
-    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+    <title>RECOVERY</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;900&display=swap" rel="stylesheet" />
     <script src="https://unpkg.com/lucide@latest"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        :root { --bg: #050507; --card: #0e0e12; --accent: #2563eb; --border: #1f1f27; }
-        body { background: var(--bg); color: #e2e8f0; font-family: 'Inter', sans-serif; min-height: 100vh; margin: 0; }
-        .syne { font-family: 'Syne', sans-serif; }
-        .glass { background: var(--card); border: 1px solid var(--border); }
-        #app-content { display: none; }
-        .tab-active { color: var(--accent); border-bottom: 2px solid var(--accent); }
-        input[type="range"] { -webkit-appearance: none; height: 4px; background: #2d2d3a; border-radius: 2px; }
-        input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 14px; height: 14px; background: var(--accent); border-radius: 50%; cursor: pointer; }
+        :root { --accent: #3b82f6; --bg: #000000; --card: #0a0a0c; }
+        body { background: var(--bg); color: #ffffff; font-family: 'Inter', sans-serif; -webkit-font-smoothing: antialiased; }
+        .ios-card { background: var(--card); border: 1px solid #1c1c1e; border-radius: 16px; transition: all 0.2s; }
+        .ios-card:active { transform: scale(0.98); background: #161618; }
+        .tab-active { color: var(--accent); }
+        input[type="range"] { -webkit-appearance: none; background: #2c2c2e; height: 3px; border-radius: 2px; }
+        input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 18px; height: 18px; background: #ffffff; border-radius: 50%; box-shadow: 0 2px 4px rgba(0,0,0,0.5); }
+        #app-content { display: none; padding-top: env(safe-area-inset-top); }
+        input, textarea { background: transparent; border: none; color: white; resize: none; width: 100%; outline: none; }
     </style>
 </head>
 <body class="pb-32">
 
-    <div id="auth-screen" class="fixed inset-0 z-[9999] bg-[#050507] flex flex-col items-center justify-center p-6">
-        <h2 class="text-3xl font-extrabold syne italic mb-8 uppercase tracking-tighter">APEX<span class="text-blue-600">PROTOCOL</span></h2>
-        <input type="password" id="pin-input" maxlength="4" placeholder="PIN" class="bg-zinc-900 border border-zinc-800 rounded-2xl px-4 py-5 text-center text-3xl tracking-[0.5em] w-48 mb-6 focus:outline-none">
-        <button onclick="checkPin()" class="bg-blue-600 px-12 py-4 rounded-2xl font-black uppercase tracking-widest text-sm">Initialize</button>
+    <div id="auth-screen" class="fixed inset-0 z-[9999] bg-black flex flex-col items-center justify-center p-8">
+        <div class="w-16 h-1 w-16 bg-blue-600 rounded-full mb-8 shadow-[0_0_15px_#3b82f6]"></div>
+        <input type="password" id="pin-input" maxlength="4" placeholder="••••" class="text-center text-4xl tracking-widest w-full mb-12 focus:outline-none">
+        <button onclick="checkPin()" class="text-[11px] font-bold tracking-[0.2em] uppercase border border-zinc-800 px-12 py-4 rounded-full active:bg-white active:text-black transition-all">Unlock System</button>
     </div>
 
     <div id="app-content">
-        <header class="p-6 border-b border-zinc-800 bg-zinc-900/20">
-            <h1 class="text-xl font-black syne italic uppercase tracking-tighter">APEX <span class="text-blue-600">PRO</span></h1>
-            <p class="text-[10px] font-bold text-zinc-500 tracking-widest uppercase">Performance Management System</p>
+        <header class="px-6 py-8">
+            <h1 class="text-2xl font-black tracking-tighter uppercase">Recovery App</h1>
+            <p id="todayDate" class="text-[10px] text-zinc-500 font-bold uppercase mt-1 tracking-widest"></p>
         </header>
 
-        <nav class="flex justify-around border-b border-zinc-900 sticky top-0 bg-[#050507] z-50">
-            <button onclick="showView('daily')" id="tab-daily" class="py-4 text-[10px] font-bold uppercase tracking-widest tab-active">Daily</button>
-            <button onclick="showView('recovery')" id="tab-recovery" class="py-4 text-[10px] font-bold uppercase tracking-widest">Recovery</button>
-            <button onclick="showView('tactics')" id="tab-tactics" class="py-4 text-[10px] font-bold uppercase tracking-widest">Tactics</button>
+        <div class="px-6 mb-8 grid grid-cols-2 gap-3">
+            <div class="ios-card p-4">
+                <div class="flex justify-between items-center mb-4">
+                    <span class="text-[9px] font-black text-zinc-500 uppercase">Pain Level</span>
+                    <span id="p-val" class="text-xs font-bold text-blue-500">0</span>
+                </div>
+                <input type="range" id="pain-slider" min="0" max="10" value="0" class="w-full" oninput="saveVitals('pain', this.value)">
+            </div>
+            <div class="ios-card p-4">
+                <div class="flex justify-between items-center mb-4">
+                    <span class="text-[9px] font-black text-zinc-500 uppercase">Readiness</span>
+                    <span id="r-val" class="text-xs font-bold text-blue-500">0</span>
+                </div>
+                <input type="range" id="readiness-slider" min="0" max="10" value="0" class="w-full" oninput="saveVitals('readiness', this.value)">
+            </div>
+        </div>
+
+        <nav class="flex justify-around px-8 mb-8 border-b border-zinc-900 pb-4">
+            <button onclick="showView('daily')" id="tab-daily" class="text-[11px] font-black uppercase tracking-widest tab-active">Daily</button>
+            <button onclick="showView('recovery')" id="tab-recovery" class="text-[11px] font-black uppercase tracking-widest text-zinc-600">Protocol</button>
         </nav>
 
-        <div id="view-daily" class="p-6 space-y-6">
-            <div class="glass p-5 rounded-3xl space-y-4">
-                <h3 class="text-[10px] font-black text-zinc-500 uppercase tracking-widest">Readiness Data</h3>
-                <div class="grid grid-cols-2 gap-4">
-                    <div>
-                        <div class="flex justify-between mb-2"><label class="text-[9px] font-bold text-zinc-400">PAIN</label><span id="val-pain" class="text-blue-500 text-[10px] font-bold">5</span></div>
-                        <input type="range" min="1" max="10" value="5" oninput="updateVal('pain', this.value)">
-                    </div>
-                    <div>
-                        <div class="flex justify-between mb-2"><label class="text-[9px] font-bold text-zinc-400">FATIGUE</label><span id="val-fat" class="text-blue-500 text-[10px] font-bold">5</span></div>
-                        <input type="range" min="1" max="10" value="5" oninput="updateVal('fat', this.value)">
-                    </div>
-                </div>
-            </div>
-
-            <div class="space-y-3" id="schedule-list">
-                </div>
+        <div id="view-daily" class="px-6 space-y-3">
+            <p class="text-[9px] font-bold text-zinc-600 uppercase mb-4 tracking-widest text-center">Tap any item to edit</p>
+            <div id="daily-list" class="space-y-3"></div>
         </div>
 
-        <div id="view-recovery" class="hidden p-6 space-y-6">
-            <div class="flex justify-between items-center">
-                <h3 class="text-[10px] font-black text-zinc-500 uppercase tracking-widest">Active Recovery</h3>
-                <button onclick="addExercise()" class="text-[9px] font-bold bg-blue-600/20 text-blue-400 px-3 py-1 rounded-full border border-blue-500/30">+ ADD NEW</button>
+        <div id="view-recovery" class="hidden px-6 space-y-3">
+            <div class="flex justify-between items-center mb-4">
+                <span class="text-[9px] font-black text-zinc-500 uppercase tracking-widest">Active Drills</span>
+                <button onclick="addRec()" class="text-blue-500 font-bold text-xl">+</button>
             </div>
-            <div id="exercise-list" class="space-y-3"></div>
-        </div>
-
-        <div id="view-tactics" class="hidden p-6">
-            <div class="glass h-80 rounded-3xl p-4 overflow-y-auto mb-4 text-[11px] space-y-2" id="chatBox"></div>
-            <div class="flex gap-2">
-                <input type="text" id="aiInput" class="flex-1 bg-zinc-900 border border-zinc-800 rounded-xl px-4 py-3 text-xs" placeholder="Ask System...">
-                <button onclick="askPhysio()" class="bg-blue-600 p-3 rounded-xl"><i data-lucide="send" class="w-4 h-4"></i></button>
-            </div>
+            <div id="rec-list" class="space-y-3"></div>
         </div>
     </div>
 
     <script>
-        const CORRECT_PIN = "0826";
-        let exercises = JSON.parse(localStorage.getItem('apex-ex')) || [
-            { name: "Frog Stretch", info: "3 mins - Deep adductor release" },
-            { name: "Foam Roll: Quads", info: "90s per leg - Slow pass" }
+        const PIN = "0826";
+        
+        // Database Initialization
+        let dailyData = JSON.parse(localStorage.getItem('dailyData')) || [
+            {t: "07:00", n: "Morning Activation", d: "Banded walks & Core"},
+            {t: "08:00", n: "School Block", d: "Hydrate & Recovery nutrition"},
+            {t: "15:30", n: "Technical Session", d: "1,000 touches focus"},
+            {t: "19:00", n: "Night Recovery", d: "Foam roll & Bible study"}
+        ];
+
+        let recData = JSON.parse(localStorage.getItem('recData')) || [
+            {n: "Frog Stretch", d: "3 mins hold"},
+            {n: "Copenhagen Planks", d: "3 x 15s per side"}
         ];
 
         function checkPin() {
-            if(document.getElementById('pin-input').value === CORRECT_PIN) {
+            if(document.getElementById('pin-input').value === PIN) {
                 document.getElementById('auth-screen').style.display = 'none';
                 document.getElementById('app-content').style.display = 'block';
-                lucide.createIcons();
-                renderSchedule();
-                renderRecovery();
-            } else { alert("VOID PIN"); }
+                document.getElementById('todayDate').innerText = new Date().toLocaleDateString('en-GB', {weekday:'long', day:'numeric', month:'short'}).toUpperCase();
+                
+                // Load saved slider values
+                const p = localStorage.getItem('v-pain') || 0;
+                const r = localStorage.getItem('v-readiness') || 0;
+                document.getElementById('pain-slider').value = p;
+                document.getElementById('p-val').innerText = p;
+                document.getElementById('readiness-slider').value = r;
+                document.getElementById('r-val').innerText = r;
+
+                render();
+            }
         }
 
-        function updateVal(id, val) { document.getElementById('val-'+id).innerText = val; }
+        function saveVitals(type, val) {
+            document.getElementById(type === 'pain' ? 'p-val' : 'r-val').innerText = val;
+            localStorage.setItem('v-' + type, val);
+        }
 
-        function renderSchedule() {
-            const isWeekend = [0, 6].includes(new Date().getDay());
-            const items = isWeekend ? [
-                { t: "09:00", n: "Match Prep / Mobility", d: "Full body flow" },
-                { t: "11:00", n: "Technical Session", d: "1,000 touches focus" }
-            ] : [
-                { t: "07:00", n: "Pre-School Activation", d: "Banded work & hydration" },
-                { t: "08:00", n: "School Block", d: "Focus on recovery nutrition at lunch" },
-                { t: "15:00", n: "Post-School Recovery", d: "Foam roll & Hydrotherapy" },
-                { t: "19:00", n: "Mental Training", d: "Scripture & Tactics study" }
-            ];
-            document.getElementById('schedule-list').innerHTML = items.map(i => `
-                <div class="glass p-4 rounded-2xl flex items-center gap-4">
-                    <span class="text-[9px] font-black text-zinc-600">${i.t}</span>
-                    <div><h4 class="text-xs font-bold uppercase">${i.n}</h4><p class="text-[9px] text-zinc-500">${i.d}</p></div>
+        function render() {
+            // Render Daily
+            document.getElementById('daily-list').innerHTML = dailyData.map((s, i) => `
+                <div class="ios-card p-5">
+                    <div class="flex justify-between mb-1">
+                        <input class="text-[10px] font-black text-zinc-700 uppercase w-16" value="${s.t}" onchange="updateDaily(${i}, 't', this.value)">
+                        <button onclick="deleteDaily(${i})" class="text-zinc-800 text-[10px] font-bold">REMOVE</button>
+                    </div>
+                    <input class="text-sm font-black uppercase tracking-tight" value="${s.n}" onchange="updateDaily(${i}, 'n', this.value)">
+                    <textarea class="text-[10px] text-zinc-500 mt-1 h-6" onchange="updateDaily(${i}, 'd', this.value)">${s.d}</textarea>
                 </div>
             `).join('');
-        }
 
-        function renderRecovery() {
-            document.getElementById('exercise-list').innerHTML = exercises.map((e, i) => `
-                <div class="glass p-4 rounded-2xl flex justify-between items-center">
-                    <div><h4 class="text-xs font-bold uppercase">${e.name}</h4><p class="text-[9px] text-zinc-500">${e.info}</p></div>
-                    <button onclick="deleteEx(${i})" class="text-zinc-700 hover:text-red-500"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+            // Render Recovery
+            document.getElementById('rec-list').innerHTML = recData.map((r, i) => `
+                <div class="ios-card p-5 flex justify-between items-center">
+                    <div class="flex-1">
+                        <input class="text-xs font-black uppercase tracking-tight mb-1" value="${r.n}" onchange="updateRec(${i}, 'n', this.value)">
+                        <input class="text-[10px] text-zinc-500" value="${r.d}" onchange="updateRec(${i}, 'd', this.value)">
+                    </div>
+                    <button onclick="deleteRec(${i})" class="text-zinc-800 ml-4"><i data-lucide="x-circle" class="w-5 h-5"></i></button>
                 </div>
             `).join('');
             lucide.createIcons();
-            localStorage.setItem('apex-ex', JSON.stringify(exercises));
+            
+            localStorage.setItem('dailyData', JSON.stringify(dailyData));
+            localStorage.setItem('recData', JSON.stringify(recData));
         }
 
-        function addExercise() {
-            const name = prompt("Exercise Name:");
-            const info = prompt("Details (Reps/Time):");
-            if(name) { exercises.push({name, info}); renderRecovery(); }
-        }
+        function updateDaily(i, field, val) { dailyData[i][field] = val; render(); }
+        function deleteDaily(i) { dailyData.splice(i, 1); render(); }
+        function updateRec(i, field, val) { recData[i][field] = val; render(); }
+        function deleteRec(i) { recData.splice(i, 1); render(); }
 
-        function deleteEx(i) { exercises.splice(i, 1); renderRecovery(); }
+        function addRec() { recData.push({n: "NEW EXERCISE", d: "TAP TO EDIT"}); render(); }
 
         function showView(v) {
-            document.querySelectorAll('[id^="view-"]').forEach(x => x.classList.add('hidden'));
+            document.querySelectorAll('[id^="view-"]').forEach(el => el.classList.add('hidden'));
             document.getElementById('view-'+v).classList.remove('hidden');
-            document.querySelectorAll('nav button').forEach(b => b.classList.remove('tab-active'));
-            document.getElementById('tab-'+v).classList.add('tab-active');
-            lucide.createIcons();
-        }
-
-        function askPhysio() {
-            const input = document.getElementById('aiInput');
-            if(!input.value) return;
-            document.getElementById('chatBox').innerHTML += `<div class="text-zinc-500">YOU: ${input.value}</div><div class="text-blue-500">SYS: Focus on the 8-3 recovery window. Hydrate during school to ensure tissue elasticity for 3pm session.</div>`;
-            input.value = '';
+            document.querySelectorAll('nav button').forEach(b => b.classList.remove('tab-active', 'text-white'));
+            document.getElementById('tab-'+v).classList.add('tab-active', 'text-white');
         }
     </script>
 </body>
