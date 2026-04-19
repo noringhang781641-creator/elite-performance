@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>Elite Path | Private</title>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet" />
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        :root {
+            --bg: #0a0a0c; --surface: #16161a; --surface2: #1f1f25;
+            --border: #2a2a32; --text: #f0f0f2; --muted: #8a8a98; --accent: #38bdf8;
+        }
+        body { background: var(--bg); color: var(--text); font-family: 'Syne', sans-serif; min-height: 100vh; display: none; }
+        .glass { background: rgba(22, 22, 26, 0.8); backdrop-filter: blur(12px); border: 1px solid var(--border); }
+        .tab-btn.active { color: var(--accent); border-bottom: 2px solid var(--accent); }
+        input[type="checkbox"] { width: 20px; height: 20px; accent-color: var(--accent); }
+    </style>
+</head>
+<body class="pb-24">
+
+    <div id="auth-screen" class="fixed inset-0 z-[9999] bg-[#0a0a0c] flex flex-col items-center justify-center p-6">
+        <h2 class="text-2xl font-extrabold mb-2">ELITE <span class="text-blue-500">PATH</span></h2>
+        <p class="text-slate-500 text-xs mb-6 uppercase tracking-widest">Restricted Academy Access</p>
+        <input type="password" id="pin-input" maxlength="4" placeholder="ENTER PIN" class="bg-slate-900 border border-slate-700 rounded-xl px-6 py-4 text-center text-2xl tracking-[1em] w-48 focus:outline-none focus:border-blue-500">
+        <button onclick="checkPin()" class="mt-4 bg-blue-600 text-white px-8 py-3 rounded-xl font-bold">UNLOCKED</button>
+    </div>
+
+    <div id="app-content">
+        <header class="p-6 flex justify-between items-center border-b border-slate-800">
+            <div>
+                <h1 class="text-xl font-extrabold italic">ELITE<span class="text-blue-500">PRO</span></h1>
+                <p class="text-[10px] text-slate-500 font-bold uppercase tracking-tighter">Millwall Scholar Protocol</p>
+            </div>
+            <div class="bg-blue-500/10 border border-blue-500/30 px-3 py-1 rounded-full text-[10px] text-blue-400 font-bold">RECOVERY MODE</div>
+        </header>
+
+        <div class="m-6 p-4 rounded-2xl bg-gradient-to-br from-slate-900 to-slate-800 border border-slate-700">
+            <div class="flex items-center gap-2 mb-2 text-blue-400">
+                <i data-lucide="shield-check" class="w-4 h-4"></i>
+                <span class="text-[10px] font-bold uppercase tracking-widest">Daily Armor</span>
+            </div>
+            <p id="verseText" class="text-sm italic font-medium">"I can do all things through Christ who strengthens me."</p>
+        </div>
+
+        <div class="flex justify-around border-b border-slate-800 mb-4">
+            <button onclick="showView('medical')" class="tab-btn py-3 px-4 text-xs font-bold active">MEDICAL</button>
+            <button onclick="showView('tactics')" class="tab-btn py-3 px-4 text-xs font-bold">TACTICS</button>
+            <button onclick="showView('calendar')" class="tab-btn py-3 px-4 text-xs font-bold">CALENDAR</button>
+        </div>
+
+        <div id="view-medical" class="px-6 space-y-4">
+            <div id="medical-list"></div>
+        </div>
+
+        <div id="view-tactics" class="hidden px-6">
+            <div class="bg-slate-900 rounded-2xl p-6 border border-slate-800 text-center">
+                <i data-lucide="layout" class="w-10 h-10 mx-auto mb-4 text-slate-700"></i>
+                <p class="text-sm text-slate-400">Drag & Drop Tactical Board</p>
+                <button class="mt-4 text-[10px] font-bold text-blue-500 uppercase">+ Add Training Block</button>
+            </div>
+        </div>
+
+        <div id="view-calendar" class="hidden px-6">
+            <div class="bg-slate-900 rounded-2xl p-4 border border-slate-800">
+                <div class="flex justify-between items-center mb-4">
+                    <span class="text-sm font-bold">APRIL 2026</span>
+                    <div class="flex gap-2">
+                        <i data-lucide="chevron-left" class="w-4 h-4 text-slate-500"></i>
+                        <i data-lucide="chevron-right" class="w-4 h-4 text-slate-500"></i>
+                    </div>
+                </div>
+                <div id="calendar-grid" class="grid grid-cols-7 gap-1 text-center text-[10px]"></div>
+            </div>
+        </div>
+
+        <div class="fixed bottom-0 left-0 right-0 p-4 bg-slate-950/90 backdrop-blur-md border-t border-slate-800">
+            <div id="chatBox" class="hidden max-h-32 overflow-y-auto mb-3 text-[11px] space-y-2"></div>
+            <div class="flex gap-2">
+                <input type="text" id="aiInput" placeholder="Ask Physio..." class="flex-1 bg-slate-900 border border-slate-800 rounded-xl px-4 py-3 text-xs">
+                <button onclick="askPhysio()" class="bg-blue-600 p-3 rounded-xl"><i data-lucide="message-square" class="w-4 h-4"></i></button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // AUTH LOGIC
+        const CORRECT_PIN = “0826”; 
+        function checkPin() {
+            const val = document.getElementById('pin-input').value;
+            if(val === CORRECT_PIN) {
+                document.getElementById('auth-screen').style.display = 'none';
+                document.body.style.display = 'block';
+                lucide.createIcons();
+            } else {
+                alert("Incorrect Pin");
+                document.getElementById('pin-input').value = '';
+            }
+        }
+
+        // DATA
+        const protocols = [
+            { d: "Mon", t: "Pool & Static Touches", c: "20m Pool walk. 500 stationary wall passes.", r: "Goal: Zero ground impact." },
+            { d: "Tue", t: "Yoga & Pelvis Align", c: "Session with coach. Focus on glute medius.", r: "No hamstring stretching." },
+            { d: "Wed", t: "Physio Assessment", c: "5-6PM Physio appointment. Full honesty on setback.", r: "AM: Light juggling only." },
+            { d: "Thu", t: "Core & Hip Release", c: "Deep core stability work. Foam roll quads/TFL.", r: "Avoid wide dribbling." },
+            { d: "Fri", t: "Friday Flush", c: "TENS machine therapy. 15m deep water running.", r: "Priority: Fluidity of movement." }
+        ];
+
+        // RENDER VIEWS
+        function showView(view) {
+            document.querySelectorAll('[id^="view-"]').forEach(v => v.classList.add('hidden'));
+            document.getElementById('view-' + view).classList.remove('hidden');
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            event.currentTarget.classList.add('active');
+        }
+
+        function renderMedical() {
+            const list = document.getElementById('medical-list');
+            list.innerHTML = protocols.map((p, i) => `
+                <div class="p-4 bg-slate-900 rounded-2xl border border-slate-800">
+                    <div class="flex justify-between items-start mb-2">
+                        <span class="text-[9px] font-black text-blue-500 uppercase">${p.d}</span>
+                        <input type="checkbox" onchange="saveCheck(${i}, this.checked)" ${localStorage.getItem('check-'+i) === 'true' ? 'checked' : ''}>
+                    </div>
+                    <h3 class="font-bold text-sm mb-1">${p.t}</h3>
+                    <p class="text-xs text-slate-400 mb-2">${p.c}</p>
+                    <p class="text-[10px] italic text-slate-500 border-t border-slate-800 pt-2">${p.r}</p>
+                </div>
+            `).join('');
+        }
+
+        function renderCalendar() {
+            const grid = document.getElementById('calendar-grid');
+            const days = ['S','M','T','W','T','F','S'];
+            let html = days.map(d => `<div class="text-slate-600 font-bold mb-2">${d}</div>`).join('');
+            for(let i=1; i<=31; i++) {
+                const isToday = i === new Date().getDate();
+                html += `<div class="py-2 ${isToday ? 'bg-blue-600 rounded-lg text-white font-bold' : 'text-slate-400'}">${i}</div>`;
+            }
+            grid.innerHTML = html;
+        }
+
+        function askPhysio() {
+            const input = document.getElementById('aiInput');
+            const box = document.getElementById('chatBox');
+            if(!input.value) return;
+            box.classList.remove('hidden');
+            box.innerHTML += `<div class="text-slate-400"><b>Me:</b> ${input.value}</div>`;
+            
+            let reply = "Winger, listen: ";
+            if(input.value.toLowerCase().includes("pain")) reply += "If it's more than 3/10, we stop. Don't risk the scholarship for one session.";
+            else reply += "Focus on the pool work today. It maintains cardio without loading that PHT tendon.";
+
+            box.innerHTML += `<div class="text-blue-400"><b>Physio:</b> ${reply}</div>`;
+            input.value = '';
+            box.scrollTop = box.scrollHeight;
+        }
+
+        function saveCheck(i, val) { localStorage.setItem('check-'+i, val); }
+
+        // INIT
+        renderMedical();
+        renderCalendar();
+    </script>
+</body>
+</html>
