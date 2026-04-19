@@ -14,42 +14,49 @@
         .ios-card { background: var(--surface); border: 1px solid var(--border); border-radius: 20px; }
         .tab-active { color: var(--accent); border-bottom: 2px solid var(--accent); }
         
+        /* Fixed Input Styling */
+        input, textarea { background: transparent !important; color: white !important; border: none !important; outline: none !important; appearance: none !important; -webkit-appearance: none !important; }
+        ::placeholder { color: #3f3f46 !important; opacity: 1; }
+
         /* Calendar Grid */
         .grid-wrap { display: grid; grid-template-columns: 50px repeat(7, 1fr); min-width: 800px; }
-        .slot { border-right: 1px solid var(--border); border-bottom: 1px solid var(--border); min-height: 70px; padding: 4px; }
+        .slot { border-right: 1px solid var(--border); border-bottom: 1px solid var(--border); min-height: 80px; padding: 4px; display: flex; flex-direction: column; gap: 4px; }
         .slot.drag-over { background: rgba(59, 130, 246, 0.1); }
-        .sched-block { border-radius: 6px; padding: 4px 6px; font-size: 9px; font-weight: 800; text-transform: uppercase; }
         
-        input[type="range"] { -webkit-appearance: none; background: #1c1c1e; height: 3px; border-radius: 5px; }
-        input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 18px; height: 18px; background: #fff; border-radius: 50%; }
+        .sched-block { border-radius: 6px; padding: 4px 6px; position: relative; animation: pop 0.2s ease; }
+        .block-name { font-size: 10px; font-weight: 800; text-transform: uppercase; display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .block-dur { font-size: 8px; font-weight: 500; opacity: 0.7; display: block; }
+        
+        .color-dot { width: 24px; height: 24px; border-radius: 50%; cursor: pointer; border: 2px solid transparent; }
+        .color-dot.active { border-color: white; transform: scale(1.1); }
+
         #app-content { display: none; padding-top: env(safe-area-inset-top); }
-        .no-scrollbar::-webkit-scrollbar { display: none; }
     </style>
 </head>
 <body class="pb-32">
 
     <div id="auth-screen" class="fixed inset-0 z-[9999] bg-black flex flex-col items-center justify-center p-8">
-        <h2 class="text-3xl font-black syne italic tracking-tighter mb-12">ELITE<span class="text-blue-600">PRO</span></h2>
-        <input type="password" id="pin-input" maxlength="4" placeholder="••••" class="bg-transparent border-b border-zinc-800 text-center text-4xl w-32 pb-2 mb-12 focus:outline-none text-white tracking-widest">
-        <button onclick="checkPin()" class="text-[10px] font-black tracking-widest uppercase border border-zinc-800 px-12 py-4 rounded-full active:bg-white active:text-black">Initialize</button>
+        <h2 class="text-3xl font-black syne italic tracking-tighter mb-12 uppercase">Elite<span class="text-blue-600">Pro</span></h2>
+        <input type="password" id="pin-input" maxlength="4" placeholder="••••" class="text-center text-4xl w-32 pb-2 mb-12 tracking-widest">
+        <button onclick="checkPin()" class="text-[10px] font-black tracking-[0.3em] uppercase border border-zinc-800 px-12 py-4 rounded-full active:bg-white active:text-black transition-all">Connect</button>
     </div>
 
     <div id="app-content">
         <header class="px-8 py-6">
-            <h1 class="text-xl font-black syne italic tracking-tighter">ELITE PRO</h1>
-            <div id="scripture-box" class="mt-4 p-4 ios-card border-blue-900/30 bg-blue-950/5 text-center">
-                <p id="scripture-text" class="text-xs italic font-medium text-blue-100"></p>
+            <h1 class="text-xl font-black syne italic tracking-tighter">RECOVERY PORTAL</h1>
+            <div id="scripture-box" class="mt-4 p-4 ios-card border-blue-900/20 bg-blue-950/5">
+                <p id="scripture-text" class="text-[11px] italic font-medium text-blue-200/80 text-center"></p>
             </div>
         </header>
 
-        <nav class="flex justify-around sticky top-0 bg-black/90 backdrop-blur-xl z-50 border-b border-zinc-900">
-            <button onclick="showView('vitals')" id="tab-vitals" class="py-4 text-[10px] font-black uppercase tracking-widest tab-active">Vitals</button>
+        <nav class="flex justify-around sticky top-0 bg-black/95 backdrop-blur-xl z-50 border-b border-zinc-900">
+            <button onclick="showView('vitals')" id="tab-vitals" class="py-4 text-[10px] font-black uppercase tracking-widest tab-active">Status</button>
             <button onclick="showView('calendar')" id="tab-calendar" class="py-4 text-[10px] font-black uppercase tracking-widest text-zinc-600">Calendar</button>
-            <button onclick="showView('protocol')" id="tab-protocol" class="py-4 text-[10px] font-black uppercase tracking-widest text-zinc-600">Protocol</button>
+            <button onclick="showView('protocol')" id="tab-protocol" class="py-4 text-[10px] font-black uppercase tracking-widest text-zinc-600">Drills</button>
             <button onclick="showView('tactics')" id="tab-tactics" class="py-4 text-[10px] font-black uppercase tracking-widest text-zinc-600">Tactics</button>
         </nav>
 
-        <div id="view-vitals" class="p-6 space-y-4">
+        <div id="view-vitals" class="p-6 space-y-6">
             <div class="grid grid-cols-2 gap-3">
                 <div class="ios-card p-5">
                     <div class="flex justify-between mb-4"><span class="text-[9px] font-black text-zinc-500 uppercase">Pain</span><span id="p-val" class="text-xs font-bold text-blue-500">0</span></div>
@@ -64,19 +71,34 @@
         </div>
 
         <div id="view-calendar" class="hidden">
-            <div class="p-4 bg-zinc-900/10 flex gap-3 overflow-x-auto no-scrollbar" id="cal-lib"></div>
+            <div class="p-6 border-b border-zinc-900 bg-zinc-950/30">
+                <p class="text-[9px] font-black text-zinc-600 uppercase tracking-widest mb-4">Block Creator</p>
+                <div class="flex flex-col gap-3">
+                    <input id="new-block-name" placeholder="Block Name (e.g. Technical)" class="ios-card p-3 text-xs w-full">
+                    <input id="new-block-dur" placeholder="Duration (e.g. 45 min)" class="ios-card p-3 text-xs w-full">
+                    <div class="flex justify-between items-center">
+                        <div class="flex gap-2" id="color-picker"></div>
+                        <button onclick="createBlock()" class="bg-blue-600 px-6 py-2 rounded-xl text-[10px] font-black uppercase">Add to Library</button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="p-4 flex gap-3 overflow-x-auto no-scrollbar border-b border-zinc-900" id="cal-lib"></div>
             <div class="overflow-x-auto"><div class="grid-wrap" id="cal-grid"></div></div>
         </div>
 
         <div id="view-protocol" class="hidden p-6 space-y-4">
-            <button onclick="addDrill()" class="w-full py-4 border border-dashed border-zinc-800 rounded-2xl text-[10px] font-bold text-zinc-500 uppercase tracking-widest">+ Add New Drill</button>
+            <button onclick="addDrill()" class="w-full py-4 border border-dashed border-zinc-800 rounded-2xl text-[10px] font-bold text-zinc-600 uppercase tracking-widest">+ Add New Drill</button>
             <div id="drill-list" class="space-y-3"></div>
         </div>
 
         <div id="view-tactics" class="hidden p-6">
             <div class="ios-card h-96 flex flex-col p-4">
                 <div id="chatBox" class="flex-1 overflow-y-auto text-xs space-y-4 p-2 no-scrollbar"></div>
-                <div class="flex gap-2 pt-4 border-t border-zinc-900"><input type="text" id="aiIn" placeholder="Ask System..." class="flex-1 bg-transparent text-xs focus:outline-none"><button onclick="ask()" class="text-blue-500"><i data-lucide="send" class="w-4 h-4"></i></button></div>
+                <div class="flex gap-2 pt-4 border-t border-zinc-900">
+                    <input id="aiIn" placeholder="Ask System..." class="flex-1 text-xs">
+                    <button onclick="ask()" class="text-blue-500"><i data-lucide="send" class="w-4 h-4"></i></button>
+                </div>
             </div>
         </div>
     </div>
@@ -89,12 +111,23 @@
             "\"But they who wait for the Lord shall renew their strength.\" - Isaiah 40:31",
             "\"Be strong and courageous. Do not be frightened.\" - Joshua 1:9"
         ];
-        const COLORS = [{b:'#1e2e3d',t:'#7ab8f0'},{b:'#3d2e1e',t:'#f0c97a'},{b:'#1e3d2e',t:'#7af0b0'}];
+        const COLORS = [
+            { b: '#1e2e3d', t: '#7ab8f0' }, // Blue
+            { b: '#3d2e1e', t: '#f0c97a' }, // Gold
+            { b: '#1e3d2e', t: '#7af0b0' }, // Green
+            { b: '#3d1e1e', t: '#f07a7a' }  // Red
+        ];
 
-        let state = JSON.parse(localStorage.getItem('ep_v5')) || {
-            drills: [{n:"Frog Stretch", d:"3m hold"}, {n:"Pelvis Align", d:"Glute Med Focus"}],
-            schedule: [{t:"08:00", n:"School Block", d:"Hydration focus"}, {t:"15:30", n:"Pitch Session", d:"High intensity"}],
-            blocks: [{id:1, n:'Match', c:0}, {id:2, n:'Recovery', c:1}],
+        let selColor = 0;
+        let dragId = null;
+
+        let st = JSON.parse(localStorage.getItem('ep_v6')) || {
+            drills: [{n:"Frog Stretch", d:"3m hold"}],
+            schedule: [{t:"08:00", n:"School Block", d:"Hydration focus"}],
+            blocks: [
+                {id: 1, n: 'Match', d: '90 min', c: 0},
+                {id: 2, n: 'Recovery', d: '20 min', c: 1}
+            ],
             grid: {}
         };
 
@@ -107,12 +140,74 @@
             }
         }
 
-        function init() { renderDaily(); renderProtocol(); renderCalendar(); lucide.createIcons(); }
+        function init() {
+            renderColorPicker();
+            renderDaily();
+            renderProtocol();
+            renderCalendar();
+            lucide.createIcons();
+        }
 
-        function updateVital(t, v) { document.getElementById(t+'-val').innerText = v; localStorage.setItem(t+'-val', v); }
+        function renderColorPicker() {
+            document.getElementById('color-picker').innerHTML = COLORS.map((c, i) => `
+                <div class="color-dot ${selColor === i ? 'active' : ''}" style="background:${c.b}" onclick="selColor=${i};renderColorPicker()"></div>
+            `).join('');
+        }
 
+        function createBlock() {
+            const name = document.getElementById('new-block-name').value;
+            const dur = document.getElementById('new-block-dur').value;
+            if(!name) return;
+            st.blocks.push({ id: Date.now(), n: name, d: dur, c: selColor });
+            document.getElementById('new-block-name').value = '';
+            document.getElementById('new-block-dur').value = '';
+            save(); renderCalendar();
+        }
+
+        function renderCalendar() {
+            // Library
+            document.getElementById('cal-lib').innerHTML = st.blocks.map(b => `
+                <div class="sched-block py-2 px-4 cursor-grab" draggable="true" ondragstart="dragId=${b.id}" style="background:${COLORS[b.c].b};color:${COLORS[b.c].t}">
+                    <span class="block-name">${b.n}</span>
+                    <span class="block-dur">${b.d}</span>
+                </div>
+            `).join('');
+
+            // Grid
+            let hml = '<div class="h-10 border-b border-zinc-900"></div>';
+            for(let i=0;i<7;i++) hml += `<div class="text-center py-2 border-b border-zinc-900 text-[8px] font-black uppercase text-zinc-700 border-l border-zinc-900">${['M','T','W','T','F','S','S'][i]}</div>`;
+            for(let h=6;h<=22;h++){
+                hml += `<div class="text-[8px] text-zinc-900 text-right pr-2 pt-3 border-t border-zinc-900 font-mono">${h}:00</div>`;
+                for(let d=0;d<7;d++){
+                    const k = `${d}_${h}`;
+                    const items = (st.grid[k] || []).map((id, idx) => {
+                        const b = st.blocks.find(x => x.id === id);
+                        if(!b) return '';
+                        return `<div class="sched-block mb-1 group" style="background:${COLORS[b.c].b};color:${COLORS[b.c].t}">
+                                    <span class="block-name">${b.n}</span>
+                                    <button onclick="removeItem('${k}', ${idx})" class="absolute -top-1 -right-1 opacity-0 group-hover:opacity-100 bg-white text-black rounded-full w-3 h-3 text-[8px]">×</button>
+                                </div>`;
+                    }).join('');
+                    hml += `<div class="slot" ondragover="event.preventDefault();this.classList.add('drag-over')" ondragleave="this.classList.remove('drag-over')" ondrop="drop(event,'${k}')">${items}</div>`;
+                }
+            }
+            document.getElementById('cal-grid').innerHTML = hml;
+        }
+
+        function drop(e, k) { 
+            e.preventDefault(); 
+            this.classList.remove('drag-over');
+            if(!st.grid[k]) st.grid[k] = []; 
+            st.grid[k].push(dragId); 
+            save(); renderCalendar(); 
+        }
+
+        function removeItem(k, idx) { st.grid[k].splice(idx, 1); save(); renderCalendar(); }
+        function save() { localStorage.setItem('ep_v6', JSON.stringify(st)); }
+        function updateVital(t, v) { document.getElementById(t+'-val').innerText = v; }
+        
         function renderDaily() {
-            document.getElementById('daily-timeline').innerHTML = state.schedule.map((s,i) => `
+            document.getElementById('daily-timeline').innerHTML = st.schedule.map((s,i) => `
                 <div class="ios-card p-5">
                     <input class="text-[9px] font-black text-zinc-700 uppercase" value="${s.t}" onchange="st.schedule[${i}].t=this.value;save()">
                     <input class="text-sm font-black uppercase w-full" value="${s.n}" onchange="st.schedule[${i}].n=this.value;save()">
@@ -121,39 +216,31 @@
         }
 
         function renderProtocol() {
-            document.getElementById('drill-list').innerHTML = state.drills.map((d,i) => `
+            document.getElementById('drill-list').innerHTML = st.drills.map((d,i) => `
                 <div class="ios-card p-5 flex justify-between items-center">
-                    <div><input class="text-xs font-bold uppercase" value="${d.n}" onchange="state.drills[${i}].n=this.value;save()">
-                    <input class="text-[10px] text-zinc-500 w-full" value="${d.d}" onchange="state.drills[${i}].d=this.value;save()"></div>
-                    <button onclick="state.drills.splice(${i},1);renderProtocol()"><i data-lucide="trash-2" class="w-4 h-4 text-zinc-800"></i></button>
+                    <div><input class="text-xs font-bold uppercase" value="${d.n}" onchange="st.drills[${i}].n=this.value;save()">
+                    <input class="text-[10px] text-zinc-500 w-full" value="${d.d}" onchange="st.drills[${i}].d=this.value;save()"></div>
+                    <button onclick="st.drills.splice(${i},1);renderProtocol()"><i data-lucide="trash-2" class="w-4 h-4 text-zinc-900"></i></button>
                 </div>`).join('');
             lucide.createIcons();
         }
 
-        let dragId = null;
-        function renderCalendar() {
-            document.getElementById('cal-lib').innerHTML = state.blocks.map(b => `<div class="sched-block py-2 px-4" draggable="true" ondragstart="dragId=${b.id}" style="background:${COLORS[b.c].b};color:${COLORS[b.c].t}">${b.n}</div>`).join('');
-            let hml = '<div class="h-10 border-b border-zinc-900"></div>';
-            for(let i=0;i<7;i++) hml += `<div class="text-center py-2 border-b border-zinc-900 text-[8px] font-black uppercase text-zinc-600 border-l border-zinc-900">${['M','T','W','T','F','S','S'][i]}</div>`;
-            for(let h=6;h<=22;h++){
-                hml += `<div class="text-[8px] text-zinc-800 text-right pr-2 pt-2 border-t border-zinc-900 font-mono">${h}:00</div>`;
-                for(let d=0;d<7;d++){
-                    const k = `${d}_${h}`;
-                    const items = (state.grid[k] || []).map(id => {
-                        const b = state.blocks.find(x => x.id === id);
-                        return `<div class="sched-block mb-1" style="background:${COLORS[b.c].b};color:${COLORS[b.c].t}">${b.n}</div>`;
-                    }).join('');
-                    hml += `<div class="slot" ondragover="event.preventDefault();this.classList.add('drag-over')" ondragleave="this.classList.remove('drag-over')" ondrop="drop(event,'${k}')">${items}</div>`;
-                }
-            }
-            document.getElementById('cal-grid').innerHTML = hml;
+        function showView(v) {
+            document.querySelectorAll('[id^="view-"]').forEach(el => el.classList.add('hidden'));
+            document.getElementById('view-'+v).classList.remove('hidden');
+            document.querySelectorAll('nav button').forEach(b => b.classList.remove('tab-active','text-white'));
+            document.getElementById('tab-'+v).classList.add('tab-active','text-white');
+            lucide.createIcons();
         }
 
-        function drop(e, k) { e.preventDefault(); if(!state.grid[k]) state.grid[k] = []; state.grid[k].push(dragId); save(); renderCalendar(); }
-        function save() { localStorage.setItem('ep_v5', JSON.stringify(state)); }
-        function showView(v) { document.querySelectorAll('[id^="view-"]').forEach(el => el.classList.add('hidden')); document.getElementById('view-'+v).classList.remove('hidden'); document.querySelectorAll('nav button').forEach(b => b.classList.remove('tab-active','text-white')); document.getElementById('tab-'+v).classList.add('tab-active','text-white'); lucide.createIcons(); }
-        function ask() { const i = document.getElementById('aiIn'); if(!i.value) return; document.getElementById('chatBox').innerHTML += `<div class="text-white font-bold text-right ml-auto">YOU: ${i.value}</div><div class="text-blue-500 font-bold">SYS: Reference scripture for focus. Recovery window: 15:30.</div>`; i.value = ''; }
-        function addDrill() { state.drills.push({n:"New Drill", d:"Sets/Time"}); renderProtocol(); }
+        function ask() { 
+            const i = document.getElementById('aiIn'); 
+            if(!i.value) return; 
+            document.getElementById('chatBox').innerHTML += `<div class="text-white font-bold text-right ml-auto">YOU: ${i.value}</div><div class="text-blue-500 font-bold">SYS: Stick to the protocol. Intensity is key.</div>`; 
+            i.value = ''; 
+        }
+
+        function addDrill() { st.drills.push({n:"New Drill", d:"Sets/Reps"}); renderProtocol(); }
     </script>
 </body>
 </html>
