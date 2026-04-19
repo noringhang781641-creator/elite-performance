@@ -3,153 +3,157 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
-    <title>RECOVERY</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;900&display=swap" rel="stylesheet" />
+    <title>ELITE PRO</title>
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Inter:wght@400;600;900&family=DM+Mono&display=swap" rel="stylesheet" />
     <script src="https://unpkg.com/lucide@latest"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        :root { --accent: #3b82f6; --bg: #000000; --card: #0a0a0c; }
+        :root { --accent: #3b82f6; --bg: #000000; --surface: #0a0a0c; --border: #1c1c1e; }
         body { background: var(--bg); color: #ffffff; font-family: 'Inter', sans-serif; -webkit-font-smoothing: antialiased; }
-        .ios-card { background: var(--card); border: 1px solid #1c1c1e; border-radius: 16px; transition: all 0.2s; }
-        .ios-card:active { transform: scale(0.98); background: #161618; }
-        .tab-active { color: var(--accent); }
-        input[type="range"] { -webkit-appearance: none; background: #2c2c2e; height: 3px; border-radius: 2px; }
-        input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 18px; height: 18px; background: #ffffff; border-radius: 50%; box-shadow: 0 2px 4px rgba(0,0,0,0.5); }
+        .syne { font-family: 'Syne', sans-serif; }
+        .ios-card { background: var(--surface); border: 1px solid var(--border); border-radius: 20px; }
+        .tab-active { color: var(--accent); border-bottom: 2px solid var(--accent); }
+        
+        /* Calendar Grid */
+        .grid-wrap { display: grid; grid-template-columns: 50px repeat(7, 1fr); min-width: 800px; }
+        .slot { border-right: 1px solid var(--border); border-bottom: 1px solid var(--border); min-height: 70px; padding: 4px; }
+        .slot.drag-over { background: rgba(59, 130, 246, 0.1); }
+        .sched-block { border-radius: 6px; padding: 4px 6px; font-size: 9px; font-weight: 800; text-transform: uppercase; }
+        
+        input[type="range"] { -webkit-appearance: none; background: #1c1c1e; height: 3px; border-radius: 5px; }
+        input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 18px; height: 18px; background: #fff; border-radius: 50%; }
         #app-content { display: none; padding-top: env(safe-area-inset-top); }
-        input, textarea { background: transparent; border: none; color: white; resize: none; width: 100%; outline: none; }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
     </style>
 </head>
 <body class="pb-32">
 
     <div id="auth-screen" class="fixed inset-0 z-[9999] bg-black flex flex-col items-center justify-center p-8">
-        <div class="w-16 h-1 w-16 bg-blue-600 rounded-full mb-8 shadow-[0_0_15px_#3b82f6]"></div>
-        <input type="password" id="pin-input" maxlength="4" placeholder="••••" class="text-center text-4xl tracking-widest w-full mb-12 focus:outline-none">
-        <button onclick="checkPin()" class="text-[11px] font-bold tracking-[0.2em] uppercase border border-zinc-800 px-12 py-4 rounded-full active:bg-white active:text-black transition-all">Unlock System</button>
+        <h2 class="text-3xl font-black syne italic tracking-tighter mb-12">ELITE<span class="text-blue-600">PRO</span></h2>
+        <input type="password" id="pin-input" maxlength="4" placeholder="••••" class="bg-transparent border-b border-zinc-800 text-center text-4xl w-32 pb-2 mb-12 focus:outline-none text-white tracking-widest">
+        <button onclick="checkPin()" class="text-[10px] font-black tracking-widest uppercase border border-zinc-800 px-12 py-4 rounded-full active:bg-white active:text-black">Initialize</button>
     </div>
 
     <div id="app-content">
-        <header class="px-6 py-8">
-            <h1 class="text-2xl font-black tracking-tighter uppercase">Recovery App</h1>
-            <p id="todayDate" class="text-[10px] text-zinc-500 font-bold uppercase mt-1 tracking-widest"></p>
+        <header class="px-8 py-6">
+            <h1 class="text-xl font-black syne italic tracking-tighter">ELITE PRO</h1>
+            <div id="scripture-box" class="mt-4 p-4 ios-card border-blue-900/30 bg-blue-950/5 text-center">
+                <p id="scripture-text" class="text-xs italic font-medium text-blue-100"></p>
+            </div>
         </header>
 
-        <div class="px-6 mb-8 grid grid-cols-2 gap-3">
-            <div class="ios-card p-4">
-                <div class="flex justify-between items-center mb-4">
-                    <span class="text-[9px] font-black text-zinc-500 uppercase">Pain Level</span>
-                    <span id="p-val" class="text-xs font-bold text-blue-500">0</span>
-                </div>
-                <input type="range" id="pain-slider" min="0" max="10" value="0" class="w-full" oninput="saveVitals('pain', this.value)">
-            </div>
-            <div class="ios-card p-4">
-                <div class="flex justify-between items-center mb-4">
-                    <span class="text-[9px] font-black text-zinc-500 uppercase">Readiness</span>
-                    <span id="r-val" class="text-xs font-bold text-blue-500">0</span>
-                </div>
-                <input type="range" id="readiness-slider" min="0" max="10" value="0" class="w-full" oninput="saveVitals('readiness', this.value)">
-            </div>
-        </div>
-
-        <nav class="flex justify-around px-8 mb-8 border-b border-zinc-900 pb-4">
-            <button onclick="showView('daily')" id="tab-daily" class="text-[11px] font-black uppercase tracking-widest tab-active">Daily</button>
-            <button onclick="showView('recovery')" id="tab-recovery" class="text-[11px] font-black uppercase tracking-widest text-zinc-600">Protocol</button>
+        <nav class="flex justify-around sticky top-0 bg-black/90 backdrop-blur-xl z-50 border-b border-zinc-900">
+            <button onclick="showView('vitals')" id="tab-vitals" class="py-4 text-[10px] font-black uppercase tracking-widest tab-active">Vitals</button>
+            <button onclick="showView('calendar')" id="tab-calendar" class="py-4 text-[10px] font-black uppercase tracking-widest text-zinc-600">Calendar</button>
+            <button onclick="showView('protocol')" id="tab-protocol" class="py-4 text-[10px] font-black uppercase tracking-widest text-zinc-600">Protocol</button>
+            <button onclick="showView('tactics')" id="tab-tactics" class="py-4 text-[10px] font-black uppercase tracking-widest text-zinc-600">Tactics</button>
         </nav>
 
-        <div id="view-daily" class="px-6 space-y-3">
-            <p class="text-[9px] font-bold text-zinc-600 uppercase mb-4 tracking-widest text-center">Tap any item to edit</p>
-            <div id="daily-list" class="space-y-3"></div>
+        <div id="view-vitals" class="p-6 space-y-4">
+            <div class="grid grid-cols-2 gap-3">
+                <div class="ios-card p-5">
+                    <div class="flex justify-between mb-4"><span class="text-[9px] font-black text-zinc-500 uppercase">Pain</span><span id="p-val" class="text-xs font-bold text-blue-500">0</span></div>
+                    <input type="range" min="0" max="10" value="0" class="w-full" oninput="updateVital('p', this.value)">
+                </div>
+                <div class="ios-card p-5">
+                    <div class="flex justify-between mb-4"><span class="text-[9px] font-black text-zinc-500 uppercase">Ready</span><span id="r-val" class="text-xs font-bold text-blue-500">0</span></div>
+                    <input type="range" min="0" max="10" value="0" class="w-full" oninput="updateVital('r', this.value)">
+                </div>
+            </div>
+            <div id="daily-timeline" class="space-y-3"></div>
         </div>
 
-        <div id="view-recovery" class="hidden px-6 space-y-3">
-            <div class="flex justify-between items-center mb-4">
-                <span class="text-[9px] font-black text-zinc-500 uppercase tracking-widest">Active Drills</span>
-                <button onclick="addRec()" class="text-blue-500 font-bold text-xl">+</button>
+        <div id="view-calendar" class="hidden">
+            <div class="p-4 bg-zinc-900/10 flex gap-3 overflow-x-auto no-scrollbar" id="cal-lib"></div>
+            <div class="overflow-x-auto"><div class="grid-wrap" id="cal-grid"></div></div>
+        </div>
+
+        <div id="view-protocol" class="hidden p-6 space-y-4">
+            <button onclick="addDrill()" class="w-full py-4 border border-dashed border-zinc-800 rounded-2xl text-[10px] font-bold text-zinc-500 uppercase tracking-widest">+ Add New Drill</button>
+            <div id="drill-list" class="space-y-3"></div>
+        </div>
+
+        <div id="view-tactics" class="hidden p-6">
+            <div class="ios-card h-96 flex flex-col p-4">
+                <div id="chatBox" class="flex-1 overflow-y-auto text-xs space-y-4 p-2 no-scrollbar"></div>
+                <div class="flex gap-2 pt-4 border-t border-zinc-900"><input type="text" id="aiIn" placeholder="Ask System..." class="flex-1 bg-transparent text-xs focus:outline-none"><button onclick="ask()" class="text-blue-500"><i data-lucide="send" class="w-4 h-4"></i></button></div>
             </div>
-            <div id="rec-list" class="space-y-3"></div>
         </div>
     </div>
 
     <script>
         const PIN = "0826";
-        
-        // Database Initialization
-        let dailyData = JSON.parse(localStorage.getItem('dailyData')) || [
-            {t: "07:00", n: "Morning Activation", d: "Banded walks & Core"},
-            {t: "08:00", n: "School Block", d: "Hydrate & Recovery nutrition"},
-            {t: "15:30", n: "Technical Session", d: "1,000 touches focus"},
-            {t: "19:00", n: "Night Recovery", d: "Foam roll & Bible study"}
+        const VERSES = [
+            "\"I can do all things through Christ who strengthens me.\" - Phil 4:13",
+            "\"The Lord is my strength and my shield.\" - Psalm 28:7",
+            "\"But they who wait for the Lord shall renew their strength.\" - Isaiah 40:31",
+            "\"Be strong and courageous. Do not be frightened.\" - Joshua 1:9"
         ];
+        const COLORS = [{b:'#1e2e3d',t:'#7ab8f0'},{b:'#3d2e1e',t:'#f0c97a'},{b:'#1e3d2e',t:'#7af0b0'}];
 
-        let recData = JSON.parse(localStorage.getItem('recData')) || [
-            {n: "Frog Stretch", d: "3 mins hold"},
-            {n: "Copenhagen Planks", d: "3 x 15s per side"}
-        ];
+        let state = JSON.parse(localStorage.getItem('ep_v5')) || {
+            drills: [{n:"Frog Stretch", d:"3m hold"}, {n:"Pelvis Align", d:"Glute Med Focus"}],
+            schedule: [{t:"08:00", n:"School Block", d:"Hydration focus"}, {t:"15:30", n:"Pitch Session", d:"High intensity"}],
+            blocks: [{id:1, n:'Match', c:0}, {id:2, n:'Recovery', c:1}],
+            grid: {}
+        };
 
         function checkPin() {
             if(document.getElementById('pin-input').value === PIN) {
                 document.getElementById('auth-screen').style.display = 'none';
                 document.getElementById('app-content').style.display = 'block';
-                document.getElementById('todayDate').innerText = new Date().toLocaleDateString('en-GB', {weekday:'long', day:'numeric', month:'short'}).toUpperCase();
-                
-                // Load saved slider values
-                const p = localStorage.getItem('v-pain') || 0;
-                const r = localStorage.getItem('v-readiness') || 0;
-                document.getElementById('pain-slider').value = p;
-                document.getElementById('p-val').innerText = p;
-                document.getElementById('readiness-slider').value = r;
-                document.getElementById('r-val').innerText = r;
-
-                render();
+                document.getElementById('scripture-text').innerText = VERSES[Math.floor(Math.random()*VERSES.length)];
+                init();
             }
         }
 
-        function saveVitals(type, val) {
-            document.getElementById(type === 'pain' ? 'p-val' : 'r-val').innerText = val;
-            localStorage.setItem('v-' + type, val);
-        }
+        function init() { renderDaily(); renderProtocol(); renderCalendar(); lucide.createIcons(); }
 
-        function render() {
-            // Render Daily
-            document.getElementById('daily-list').innerHTML = dailyData.map((s, i) => `
+        function updateVital(t, v) { document.getElementById(t+'-val').innerText = v; localStorage.setItem(t+'-val', v); }
+
+        function renderDaily() {
+            document.getElementById('daily-timeline').innerHTML = state.schedule.map((s,i) => `
                 <div class="ios-card p-5">
-                    <div class="flex justify-between mb-1">
-                        <input class="text-[10px] font-black text-zinc-700 uppercase w-16" value="${s.t}" onchange="updateDaily(${i}, 't', this.value)">
-                        <button onclick="deleteDaily(${i})" class="text-zinc-800 text-[10px] font-bold">REMOVE</button>
-                    </div>
-                    <input class="text-sm font-black uppercase tracking-tight" value="${s.n}" onchange="updateDaily(${i}, 'n', this.value)">
-                    <textarea class="text-[10px] text-zinc-500 mt-1 h-6" onchange="updateDaily(${i}, 'd', this.value)">${s.d}</textarea>
-                </div>
-            `).join('');
+                    <input class="text-[9px] font-black text-zinc-700 uppercase" value="${s.t}" onchange="st.schedule[${i}].t=this.value;save()">
+                    <input class="text-sm font-black uppercase w-full" value="${s.n}" onchange="st.schedule[${i}].n=this.value;save()">
+                    <input class="text-[10px] text-zinc-500 w-full" value="${s.d}" onchange="st.schedule[${i}].d=this.value;save()">
+                </div>`).join('');
+        }
 
-            // Render Recovery
-            document.getElementById('rec-list').innerHTML = recData.map((r, i) => `
+        function renderProtocol() {
+            document.getElementById('drill-list').innerHTML = state.drills.map((d,i) => `
                 <div class="ios-card p-5 flex justify-between items-center">
-                    <div class="flex-1">
-                        <input class="text-xs font-black uppercase tracking-tight mb-1" value="${r.n}" onchange="updateRec(${i}, 'n', this.value)">
-                        <input class="text-[10px] text-zinc-500" value="${r.d}" onchange="updateRec(${i}, 'd', this.value)">
-                    </div>
-                    <button onclick="deleteRec(${i})" class="text-zinc-800 ml-4"><i data-lucide="x-circle" class="w-5 h-5"></i></button>
-                </div>
-            `).join('');
+                    <div><input class="text-xs font-bold uppercase" value="${d.n}" onchange="state.drills[${i}].n=this.value;save()">
+                    <input class="text-[10px] text-zinc-500 w-full" value="${d.d}" onchange="state.drills[${i}].d=this.value;save()"></div>
+                    <button onclick="state.drills.splice(${i},1);renderProtocol()"><i data-lucide="trash-2" class="w-4 h-4 text-zinc-800"></i></button>
+                </div>`).join('');
             lucide.createIcons();
-            
-            localStorage.setItem('dailyData', JSON.stringify(dailyData));
-            localStorage.setItem('recData', JSON.stringify(recData));
         }
 
-        function updateDaily(i, field, val) { dailyData[i][field] = val; render(); }
-        function deleteDaily(i) { dailyData.splice(i, 1); render(); }
-        function updateRec(i, field, val) { recData[i][field] = val; render(); }
-        function deleteRec(i) { recData.splice(i, 1); render(); }
-
-        function addRec() { recData.push({n: "NEW EXERCISE", d: "TAP TO EDIT"}); render(); }
-
-        function showView(v) {
-            document.querySelectorAll('[id^="view-"]').forEach(el => el.classList.add('hidden'));
-            document.getElementById('view-'+v).classList.remove('hidden');
-            document.querySelectorAll('nav button').forEach(b => b.classList.remove('tab-active', 'text-white'));
-            document.getElementById('tab-'+v).classList.add('tab-active', 'text-white');
+        let dragId = null;
+        function renderCalendar() {
+            document.getElementById('cal-lib').innerHTML = state.blocks.map(b => `<div class="sched-block py-2 px-4" draggable="true" ondragstart="dragId=${b.id}" style="background:${COLORS[b.c].b};color:${COLORS[b.c].t}">${b.n}</div>`).join('');
+            let hml = '<div class="h-10 border-b border-zinc-900"></div>';
+            for(let i=0;i<7;i++) hml += `<div class="text-center py-2 border-b border-zinc-900 text-[8px] font-black uppercase text-zinc-600 border-l border-zinc-900">${['M','T','W','T','F','S','S'][i]}</div>`;
+            for(let h=6;h<=22;h++){
+                hml += `<div class="text-[8px] text-zinc-800 text-right pr-2 pt-2 border-t border-zinc-900 font-mono">${h}:00</div>`;
+                for(let d=0;d<7;d++){
+                    const k = `${d}_${h}`;
+                    const items = (state.grid[k] || []).map(id => {
+                        const b = state.blocks.find(x => x.id === id);
+                        return `<div class="sched-block mb-1" style="background:${COLORS[b.c].b};color:${COLORS[b.c].t}">${b.n}</div>`;
+                    }).join('');
+                    hml += `<div class="slot" ondragover="event.preventDefault();this.classList.add('drag-over')" ondragleave="this.classList.remove('drag-over')" ondrop="drop(event,'${k}')">${items}</div>`;
+                }
+            }
+            document.getElementById('cal-grid').innerHTML = hml;
         }
+
+        function drop(e, k) { e.preventDefault(); if(!state.grid[k]) state.grid[k] = []; state.grid[k].push(dragId); save(); renderCalendar(); }
+        function save() { localStorage.setItem('ep_v5', JSON.stringify(state)); }
+        function showView(v) { document.querySelectorAll('[id^="view-"]').forEach(el => el.classList.add('hidden')); document.getElementById('view-'+v).classList.remove('hidden'); document.querySelectorAll('nav button').forEach(b => b.classList.remove('tab-active','text-white')); document.getElementById('tab-'+v).classList.add('tab-active','text-white'); lucide.createIcons(); }
+        function ask() { const i = document.getElementById('aiIn'); if(!i.value) return; document.getElementById('chatBox').innerHTML += `<div class="text-white font-bold text-right ml-auto">YOU: ${i.value}</div><div class="text-blue-500 font-bold">SYS: Reference scripture for focus. Recovery window: 15:30.</div>`; i.value = ''; }
+        function addDrill() { state.drills.push({n:"New Drill", d:"Sets/Time"}); renderProtocol(); }
     </script>
 </body>
 </html>
