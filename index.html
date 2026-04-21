@@ -1,246 +1,951 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
-    <title>ELITE PRO</title>
-    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Inter:wght@400;600;900&family=DM+Mono&display=swap" rel="stylesheet" />
-    <script src="https://unpkg.com/lucide@latest"></script>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        :root { --accent: #3b82f6; --bg: #000000; --surface: #0a0a0c; --border: #1c1c1e; }
-        body { background: var(--bg); color: #ffffff; font-family: 'Inter', sans-serif; -webkit-font-smoothing: antialiased; }
-        .syne { font-family: 'Syne', sans-serif; }
-        .ios-card { background: var(--surface); border: 1px solid var(--border); border-radius: 20px; }
-        .tab-active { color: var(--accent); border-bottom: 2px solid var(--accent); }
-        
-        /* Fixed Input Styling */
-        input, textarea { background: transparent !important; color: white !important; border: none !important; outline: none !important; appearance: none !important; -webkit-appearance: none !important; }
-        ::placeholder { color: #3f3f46 !important; opacity: 1; }
-
-        /* Calendar Grid */
-        .grid-wrap { display: grid; grid-template-columns: 50px repeat(7, 1fr); min-width: 800px; }
-        .slot { border-right: 1px solid var(--border); border-bottom: 1px solid var(--border); min-height: 80px; padding: 4px; display: flex; flex-direction: column; gap: 4px; }
-        .slot.drag-over { background: rgba(59, 130, 246, 0.1); }
-        
-        .sched-block { border-radius: 6px; padding: 4px 6px; position: relative; animation: pop 0.2s ease; }
-        .block-name { font-size: 10px; font-weight: 800; text-transform: uppercase; display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-        .block-dur { font-size: 8px; font-weight: 500; opacity: 0.7; display: block; }
-        
-        .color-dot { width: 24px; height: 24px; border-radius: 50%; cursor: pointer; border: 2px solid transparent; }
-        .color-dot.active { border-color: white; transform: scale(1.1); }
-
-        #app-content { display: none; padding-top: env(safe-area-inset-top); }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title> Recovery - PHT Injury</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #f5f5f5;
+      color: #1a1a1a;
+      line-height: 1.6;
+    }
+    
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 12px;
+    }
+    
+    .header {
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      margin-bottom: 16px;
+      border: 0.5px solid #e0e0e0;
+    }
+    
+    .header h1 {
+      font-size: 26px;
+      margin-bottom: 6px;
+      color: #1a1a1a;
+    }
+    
+    .header .tagline {
+      font-size: 14px;
+      color: #666;
+      font-weight: 500;
+      margin-bottom: 12px;
+    }
+    
+    .bible-verse {
+      background: linear-gradient(135deg, #f3e5ab 0%, #fef9e7 100%);
+      border-left: 4px solid #d4af37;
+      padding: 12px;
+      border-radius: 6px;
+      font-size: 13px;
+      font-style: italic;
+      color: #5a5a2a;
+      line-height: 1.6;
+    }
+    
+    .tabs {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 16px;
+      overflow-x: auto;
+      padding-bottom: 4px;
+    }
+    
+    .tab {
+      padding: 10px 16px;
+      border: 0.5px solid #d0d0d0;
+      border-radius: 8px;
+      background: white;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 500;
+      transition: all 0.2s;
+      white-space: nowrap;
+    }
+    
+    .tab:hover {
+      background: #f0f0f0;
+    }
+    
+    .tab.active {
+      background: #2563eb;
+      color: white;
+      border-color: #2563eb;
+    }
+    
+    .tab-content {
+      display: none;
+    }
+    
+    .tab-content.active {
+      display: block;
+    }
+    
+    .card {
+      background: white;
+      border: 0.5px solid #e0e0e0;
+      border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 12px;
+    }
+    
+    .card h2 {
+      font-size: 18px;
+      margin-bottom: 12px;
+      color: #1a1a1a;
+      border-bottom: 0.5px solid #e0e0e0;
+      padding-bottom: 8px;
+    }
+    
+    .card h3 {
+      font-size: 15px;
+      margin: 12px 0 8px;
+      color: #1a1a1a;
+    }
+    
+    .schedule-item {
+      background: #f9f9f9;
+      border-left: 3px solid #2563eb;
+      padding: 12px;
+      margin-bottom: 8px;
+      border-radius: 4px;
+    }
+    
+    .schedule-time {
+      font-size: 12px;
+      color: #2563eb;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+    
+    .schedule-activity {
+      font-size: 14px;
+      font-weight: 500;
+      margin-bottom: 4px;
+    }
+    
+    .schedule-desc {
+      font-size: 13px;
+      color: #666;
+      line-height: 1.5;
+    }
+    
+    .exercise-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    
+    .exercise-item {
+      background: #f9f9f9;
+      border: 0.5px solid #efefef;
+      border-radius: 8px;
+      padding: 12px;
+    }
+    
+    .exercise-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+    
+    .exercise-name {
+      font-size: 14px;
+      font-weight: 500;
+      color: #1a1a1a;
+    }
+    
+    .exercise-duration {
+      font-size: 12px;
+      color: #2563eb;
+      font-weight: 500;
+    }
+    
+    .exercise-desc {
+      font-size: 13px;
+      color: #555;
+      line-height: 1.5;
+    }
+    
+    .checklist {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    
+    .checklist-item {
+      background: #f9f9f9;
+      border: 0.5px solid #efefef;
+      border-radius: 8px;
+      padding: 12px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    
+    .checklist-item input[type="checkbox"] {
+      width: 20px;
+      height: 20px;
+      cursor: pointer;
+    }
+    
+    .checklist-item.checked {
+      opacity: 0.5;
+    }
+    
+    .checklist-item.checked .checklist-text {
+      text-decoration: line-through;
+    }
+    
+    .checklist-text {
+      flex: 1;
+      font-size: 14px;
+    }
+    
+    .btn {
+      padding: 10px 16px;
+      border: 0.5px solid #d0d0d0;
+      border-radius: 8px;
+      background: white;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 500;
+      transition: all 0.2s;
+      display: inline-block;
+    }
+    
+    .btn:hover {
+      background: #f0f0f0;
+    }
+    
+    .btn-primary {
+      background: #2563eb;
+      color: white;
+      border-color: #2563eb;
+    }
+    
+    .btn-primary:hover {
+      background: #1d4ed8;
+    }
+    
+    .btn-danger {
+      background: #ef4444;
+      color: white;
+      border-color: #ef4444;
+    }
+    
+    .btn-danger:hover {
+      background: #dc2626;
+    }
+    
+    .input-group {
+      margin-bottom: 12px;
+    }
+    
+    .input-group label {
+      display: block;
+      font-size: 13px;
+      font-weight: 500;
+      margin-bottom: 6px;
+      color: #555;
+    }
+    
+    .input-group input,
+    .input-group textarea {
+      width: 100%;
+      padding: 10px;
+      border: 0.5px solid #d0d0d0;
+      border-radius: 6px;
+      font-size: 14px;
+      font-family: inherit;
+    }
+    
+    .input-group textarea {
+      resize: vertical;
+      min-height: 80px;
+    }
+    
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+    
+    .stat-card {
+      background: white;
+      border: 0.5px solid #e0e0e0;
+      border-radius: 8px;
+      padding: 16px;
+      text-align: center;
+    }
+    
+    .stat-label {
+      font-size: 12px;
+      color: #999;
+      margin-bottom: 8px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    
+    .stat-value {
+      font-size: 24px;
+      font-weight: 600;
+      color: #2563eb;
+    }
+    
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.5);
+      z-index: 1000;
+      overflow-y: auto;
+    }
+    
+    .modal.active {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    
+    .modal-content {
+      background: white;
+      border-radius: 12px;
+      padding: 20px;
+      max-width: 500px;
+      width: 100%;
+    }
+    
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+      padding-bottom: 12px;
+      border-bottom: 0.5px solid #e0e0e0;
+    }
+    
+    .modal-header h3 {
+      font-size: 18px;
+      margin: 0;
+    }
+    
+    .modal-close {
+      font-size: 24px;
+      cursor: pointer;
+      color: #999;
+    }
+    
+    .custom-exercises {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+    
+    .custom-exercise {
+      background: #f9f9f9;
+      border: 0.5px solid #efefef;
+      border-radius: 8px;
+      padding: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .alert {
+      background: #fef3c7;
+      border-left: 4px solid #f59e0b;
+      padding: 12px;
+      border-radius: 6px;
+      margin-bottom: 12px;
+      font-size: 13px;
+      color: #92400e;
+    }
+    
+    .phase-indicator {
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 4px;
+      font-size: 12px;
+      font-weight: 500;
+      margin-bottom: 12px;
+    }
+    
+    .phase-recovery {
+      background: #fef3c7;
+      color: #92400e;
+    }
+    
+    .phase-return {
+      background: #d1fae5;
+      color: #065f46;
+    }
+    
+    @media (max-width: 600px) {
+      .container {
+        padding: 8px;
+      }
+      
+      .header {
+        padding: 16px;
+      }
+      
+      .tabs {
+        gap: 6px;
+      }
+      
+      .tab {
+        padding: 8px 12px;
+        font-size: 13px;
+      }
+    }
+  </style>
 </head>
-<body class="pb-32">
-
-    <div id="auth-screen" class="fixed inset-0 z-[9999] bg-black flex flex-col items-center justify-center p-8">
-        <h2 class="text-3xl font-black syne italic tracking-tighter mb-12 uppercase">Elite<span class="text-blue-600">Pro</span></h2>
-        <input type="password" id="pin-input" maxlength="4" placeholder="••••" class="text-center text-4xl w-32 pb-2 mb-12 tracking-widest">
-        <button onclick="checkPin()" class="text-[10px] font-black tracking-[0.3em] uppercase border border-zinc-800 px-12 py-4 rounded-full active:bg-white active:text-black transition-all">Connect</button>
+<body>
+ 
+<div class="container">
+  <div class="header">
+    <h1> Recovery</h1>
+    <p class="tagline">Be smart. Work hard.</p>
+    <div class="bible-verse" id="bibleVerse"></div>
+  </div>
+  
+  <div class="tabs">
+    <div class="tab active" onclick="switchTab('daily')">Daily schedule</div>
+    <div class="tab" onclick="switchTab('stretching')">Stretching</div>
+    <div class="tab" onclick="switchTab('foam')">Foam rolling</div>
+    <div class="tab" onclick="switchTab('recovery')">Recovery tools</div>
+    <div class="tab" onclick="switchTab('tracker')">Weekly tracker</div>
+  </div>
+  
+  <div id="daily" class="tab-content active">
+    <div class="card">
+      <h2>Today's schedule</h2>
+      <div class="phase-indicator phase-recovery" id="phaseIndicator">Recovery week</div>
+      <div id="dailySchedule"></div>
     </div>
-
-    <div id="app-content">
-        <header class="px-8 py-6">
-            <h1 class="text-xl font-black syne italic tracking-tighter">RECOVERY PORTAL</h1>
-            <div id="scripture-box" class="mt-4 p-4 ios-card border-blue-900/20 bg-blue-950/5">
-                <p id="scripture-text" class="text-[11px] italic font-medium text-blue-200/80 text-center"></p>
-            </div>
-        </header>
-
-        <nav class="flex justify-around sticky top-0 bg-black/95 backdrop-blur-xl z-50 border-b border-zinc-900">
-            <button onclick="showView('vitals')" id="tab-vitals" class="py-4 text-[10px] font-black uppercase tracking-widest tab-active">Status</button>
-            <button onclick="showView('calendar')" id="tab-calendar" class="py-4 text-[10px] font-black uppercase tracking-widest text-zinc-600">Calendar</button>
-            <button onclick="showView('protocol')" id="tab-protocol" class="py-4 text-[10px] font-black uppercase tracking-widest text-zinc-600">Drills</button>
-            <button onclick="showView('tactics')" id="tab-tactics" class="py-4 text-[10px] font-black uppercase tracking-widest text-zinc-600">Tactics</button>
-        </nav>
-
-        <div id="view-vitals" class="p-6 space-y-6">
-            <div class="grid grid-cols-2 gap-3">
-                <div class="ios-card p-5">
-                    <div class="flex justify-between mb-4"><span class="text-[9px] font-black text-zinc-500 uppercase">Pain</span><span id="p-val" class="text-xs font-bold text-blue-500">0</span></div>
-                    <input type="range" min="0" max="10" value="0" class="w-full" oninput="updateVital('p', this.value)">
-                </div>
-                <div class="ios-card p-5">
-                    <div class="flex justify-between mb-4"><span class="text-[9px] font-black text-zinc-500 uppercase">Ready</span><span id="r-val" class="text-xs font-bold text-blue-500">0</span></div>
-                    <input type="range" min="0" max="10" value="0" class="w-full" oninput="updateVital('r', this.value)">
-                </div>
-            </div>
-            <div id="daily-timeline" class="space-y-3"></div>
-        </div>
-
-        <div id="view-calendar" class="hidden">
-            <div class="p-6 border-b border-zinc-900 bg-zinc-950/30">
-                <p class="text-[9px] font-black text-zinc-600 uppercase tracking-widest mb-4">Block Creator</p>
-                <div class="flex flex-col gap-3">
-                    <input id="new-block-name" placeholder="Block Name (e.g. Technical)" class="ios-card p-3 text-xs w-full">
-                    <input id="new-block-dur" placeholder="Duration (e.g. 45 min)" class="ios-card p-3 text-xs w-full">
-                    <div class="flex justify-between items-center">
-                        <div class="flex gap-2" id="color-picker"></div>
-                        <button onclick="createBlock()" class="bg-blue-600 px-6 py-2 rounded-xl text-[10px] font-black uppercase">Add to Library</button>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="p-4 flex gap-3 overflow-x-auto no-scrollbar border-b border-zinc-900" id="cal-lib"></div>
-            <div class="overflow-x-auto"><div class="grid-wrap" id="cal-grid"></div></div>
-        </div>
-
-        <div id="view-protocol" class="hidden p-6 space-y-4">
-            <button onclick="addDrill()" class="w-full py-4 border border-dashed border-zinc-800 rounded-2xl text-[10px] font-bold text-zinc-600 uppercase tracking-widest">+ Add New Drill</button>
-            <div id="drill-list" class="space-y-3"></div>
-        </div>
-
-        <div id="view-tactics" class="hidden p-6">
-            <div class="ios-card h-96 flex flex-col p-4">
-                <div id="chatBox" class="flex-1 overflow-y-auto text-xs space-y-4 p-2 no-scrollbar"></div>
-                <div class="flex gap-2 pt-4 border-t border-zinc-900">
-                    <input id="aiIn" placeholder="Ask System..." class="flex-1 text-xs">
-                    <button onclick="ask()" class="text-blue-500"><i data-lucide="send" class="w-4 h-4"></i></button>
-                </div>
-            </div>
-        </div>
+  </div>
+  
+  <div id="stretching" class="tab-content">
+    <div class="card">
+      <h2>Stretching routines</h2>
+      <button class="btn btn-primary" onclick="openAddExercise('stretch')" style="margin-bottom: 12px;">+ Add custom stretch</button>
+      
+      <h3>Morning mobility (20 min total)</h3>
+      <div class="exercise-list" id="stretchList"></div>
+      
+      <div class="alert">
+        <strong>Key principles:</strong> Hold each stretch 30-45 sec. Never bounce. Breathe deeply. Stop if sharp pain.
+      </div>
     </div>
-
-    <script>
-        const PIN = "0826";
-        const VERSES = [
-            "\"I can do all things through Christ who strengthens me.\" - Phil 4:13",
-            "\"The Lord is my strength and my shield.\" - Psalm 28:7",
-            "\"But they who wait for the Lord shall renew their strength.\" - Isaiah 40:31",
-            "\"Be strong and courageous. Do not be frightened.\" - Joshua 1:9"
-        ];
-        const COLORS = [
-            { b: '#1e2e3d', t: '#7ab8f0' }, // Blue
-            { b: '#3d2e1e', t: '#f0c97a' }, // Gold
-            { b: '#1e3d2e', t: '#7af0b0' }, // Green
-            { b: '#3d1e1e', t: '#f07a7a' }  // Red
-        ];
-
-        let selColor = 0;
-        let dragId = null;
-
-        let st = JSON.parse(localStorage.getItem('ep_v6')) || {
-            drills: [{n:"Frog Stretch", d:"3m hold"}],
-            schedule: [{t:"08:00", n:"School Block", d:"Hydration focus"}],
-            blocks: [
-                {id: 1, n: 'Match', d: '90 min', c: 0},
-                {id: 2, n: 'Recovery', d: '20 min', c: 1}
-            ],
-            grid: {}
-        };
-
-        function checkPin() {
-            if(document.getElementById('pin-input').value === PIN) {
-                document.getElementById('auth-screen').style.display = 'none';
-                document.getElementById('app-content').style.display = 'block';
-                document.getElementById('scripture-text').innerText = VERSES[Math.floor(Math.random()*VERSES.length)];
-                init();
-            }
-        }
-
-        function init() {
-            renderColorPicker();
-            renderDaily();
-            renderProtocol();
-            renderCalendar();
-            lucide.createIcons();
-        }
-
-        function renderColorPicker() {
-            document.getElementById('color-picker').innerHTML = COLORS.map((c, i) => `
-                <div class="color-dot ${selColor === i ? 'active' : ''}" style="background:${c.b}" onclick="selColor=${i};renderColorPicker()"></div>
-            `).join('');
-        }
-
-        function createBlock() {
-            const name = document.getElementById('new-block-name').value;
-            const dur = document.getElementById('new-block-dur').value;
-            if(!name) return;
-            st.blocks.push({ id: Date.now(), n: name, d: dur, c: selColor });
-            document.getElementById('new-block-name').value = '';
-            document.getElementById('new-block-dur').value = '';
-            save(); renderCalendar();
-        }
-
-        function renderCalendar() {
-            // Library
-            document.getElementById('cal-lib').innerHTML = st.blocks.map(b => `
-                <div class="sched-block py-2 px-4 cursor-grab" draggable="true" ondragstart="dragId=${b.id}" style="background:${COLORS[b.c].b};color:${COLORS[b.c].t}">
-                    <span class="block-name">${b.n}</span>
-                    <span class="block-dur">${b.d}</span>
-                </div>
-            `).join('');
-
-            // Grid
-            let hml = '<div class="h-10 border-b border-zinc-900"></div>';
-            for(let i=0;i<7;i++) hml += `<div class="text-center py-2 border-b border-zinc-900 text-[8px] font-black uppercase text-zinc-700 border-l border-zinc-900">${['M','T','W','T','F','S','S'][i]}</div>`;
-            for(let h=6;h<=22;h++){
-                hml += `<div class="text-[8px] text-zinc-900 text-right pr-2 pt-3 border-t border-zinc-900 font-mono">${h}:00</div>`;
-                for(let d=0;d<7;d++){
-                    const k = `${d}_${h}`;
-                    const items = (st.grid[k] || []).map((id, idx) => {
-                        const b = st.blocks.find(x => x.id === id);
-                        if(!b) return '';
-                        return `<div class="sched-block mb-1 group" style="background:${COLORS[b.c].b};color:${COLORS[b.c].t}">
-                                    <span class="block-name">${b.n}</span>
-                                    <button onclick="removeItem('${k}', ${idx})" class="absolute -top-1 -right-1 opacity-0 group-hover:opacity-100 bg-white text-black rounded-full w-3 h-3 text-[8px]">×</button>
-                                </div>`;
-                    }).join('');
-                    hml += `<div class="slot" ondragover="event.preventDefault();this.classList.add('drag-over')" ondragleave="this.classList.remove('drag-over')" ondrop="drop(event,'${k}')">${items}</div>`;
-                }
-            }
-            document.getElementById('cal-grid').innerHTML = hml;
-        }
-
-        function drop(e, k) { 
-            e.preventDefault(); 
-            this.classList.remove('drag-over');
-            if(!st.grid[k]) st.grid[k] = []; 
-            st.grid[k].push(dragId); 
-            save(); renderCalendar(); 
-        }
-
-        function removeItem(k, idx) { st.grid[k].splice(idx, 1); save(); renderCalendar(); }
-        function save() { localStorage.setItem('ep_v6', JSON.stringify(st)); }
-        function updateVital(t, v) { document.getElementById(t+'-val').innerText = v; }
-        
-        function renderDaily() {
-            document.getElementById('daily-timeline').innerHTML = st.schedule.map((s,i) => `
-                <div class="ios-card p-5">
-                    <input class="text-[9px] font-black text-zinc-700 uppercase" value="${s.t}" onchange="st.schedule[${i}].t=this.value;save()">
-                    <input class="text-sm font-black uppercase w-full" value="${s.n}" onchange="st.schedule[${i}].n=this.value;save()">
-                    <input class="text-[10px] text-zinc-500 w-full" value="${s.d}" onchange="st.schedule[${i}].d=this.value;save()">
-                </div>`).join('');
-        }
-
-        function renderProtocol() {
-            document.getElementById('drill-list').innerHTML = st.drills.map((d,i) => `
-                <div class="ios-card p-5 flex justify-between items-center">
-                    <div><input class="text-xs font-bold uppercase" value="${d.n}" onchange="st.drills[${i}].n=this.value;save()">
-                    <input class="text-[10px] text-zinc-500 w-full" value="${d.d}" onchange="st.drills[${i}].d=this.value;save()"></div>
-                    <button onclick="st.drills.splice(${i},1);renderProtocol()"><i data-lucide="trash-2" class="w-4 h-4 text-zinc-900"></i></button>
-                </div>`).join('');
-            lucide.createIcons();
-        }
-
-        function showView(v) {
-            document.querySelectorAll('[id^="view-"]').forEach(el => el.classList.add('hidden'));
-            document.getElementById('view-'+v).classList.remove('hidden');
-            document.querySelectorAll('nav button').forEach(b => b.classList.remove('tab-active','text-white'));
-            document.getElementById('tab-'+v).classList.add('tab-active','text-white');
-            lucide.createIcons();
-        }
-
-        function ask() { 
-            const i = document.getElementById('aiIn'); 
-            if(!i.value) return; 
-            document.getElementById('chatBox').innerHTML += `<div class="text-white font-bold text-right ml-auto">YOU: ${i.value}</div><div class="text-blue-500 font-bold">SYS: Stick to the protocol. Intensity is key.</div>`; 
-            i.value = ''; 
-        }
-
-        function addDrill() { st.drills.push({n:"New Drill", d:"Sets/Reps"}); renderProtocol(); }
-    </script>
+  </div>
+  
+  <div id="foam" class="tab-content">
+    <div class="card">
+      <h2>Foam rolling protocol</h2>
+      <button class="btn btn-primary" onclick="openAddExercise('foam')" style="margin-bottom: 12px;">+ Add custom area</button>
+      
+      <div class="exercise-list" id="foamList"></div>
+      
+      <div class="alert">
+        <strong>Key principles:</strong> Roll slowly (1 inch per second). Avoid rolling directly on joints or spine. 30-45 sec per area. Moderate pressure only.
+      </div>
+    </div>
+  </div>
+  
+  <div id="recovery" class="tab-content">
+    <div class="card">
+      <h2>Recovery tools & protocols</h2>
+      <button class="btn btn-primary" onclick="openAddExercise('recovery')" style="margin-bottom: 12px;">+ Add custom tool</button>
+      
+      <div class="exercise-list" id="recoveryList"></div>
+    </div>
+  </div>
+  
+  <div id="tracker" class="tab-content">
+    <div class="stats">
+      <div class="stat-card">
+        <div class="stat-label">Week progress</div>
+        <div class="stat-value" id="weekProgress">0%</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Tasks done</div>
+        <div class="stat-value" id="tasksDone">0/42</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Days complete</div>
+        <div class="stat-value" id="daysComplete">0/7</div>
+      </div>
+    </div>
+    
+    <div class="card">
+      <h2>Weekly checklist</h2>
+      <div style="display: flex; gap: 8px; margin-bottom: 12px;">
+        <button class="btn" onclick="changePhase('recovery')">Recovery week</button>
+        <button class="btn" onclick="changePhase('return')">Return to training</button>
+        <button class="btn btn-danger" onclick="resetWeek()">Reset week</button>
+      </div>
+      <div id="weeklyChecklist"></div>
+    </div>
+  </div>
+</div>
+ 
+<div id="addExerciseModal" class="modal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h3 id="modalTitle">Add exercise</h3>
+      <span class="modal-close" onclick="closeAddExercise()">&times;</span>
+    </div>
+    <div class="input-group">
+      <label>Exercise name</label>
+      <input type="text" id="exerciseName" placeholder="e.g., Hamstring stretch">
+    </div>
+    <div class="input-group">
+      <label>Duration</label>
+      <input type="text" id="exerciseDuration" placeholder="e.g., 45 sec or 10 reps">
+    </div>
+    <div class="input-group">
+      <label>Description</label>
+      <textarea id="exerciseDesc" placeholder="How to perform this exercise..."></textarea>
+    </div>
+    <button class="btn btn-primary" onclick="saveCustomExercise()">Save</button>
+  </div>
+</div>
+ 
+<script>
+const BIBLE_VERSES = [
+  '"I can do all this through him who gives me strength." – Philippians 4:13',
+  '"For the Spirit God gave us does not make us timid, but gives us power, love and self-discipline." – 2 Timothy 1:7',
+  '"Come to me, all you who are weary and burdened, and I will give you rest." – Matthew 11:28',
+  '"Do you not know that your bodies are temples of the Holy Spirit, who is in you?" – 1 Corinthians 6:19',
+  '"Therefore do not worry about tomorrow, for tomorrow will worry about itself." – Matthew 6:34',
+  '"His grace is sufficient for me, for his power is made perfect in weakness." – 2 Corinthians 12:9',
+  '"Trust in the Lord with all your heart and lean not on your own understanding." – Proverbs 3:5'
+];
+ 
+const STRETCHES = [
+  { name: 'Diaphragmatic breathing', duration: '2 min', desc: 'Lie on back or sit comfortably. Place one hand on chest, one on belly. Breathe in through nose (4 counts), belly rises. Hold (4 counts). Breathe out through mouth (6 counts). Repeat 5-8 times. Calms nervous system and prepares body for movement.' },
+  { name: 'Cat-cow stretch', duration: '10 reps', desc: 'On hands and knees. Inhale: arch back, lift head and tailbone (cow). Exhale: round spine, tuck chin and tailbone (cat). Move slowly and controlled. Mobilizes entire spine and reduces lower back tension.' },
+  { name: '90/90 hip stretch (right side)', duration: '45 sec', desc: 'Sit on floor. Right leg bent in front at 90 degrees, left leg bent behind at 90 degrees. Keep both sit bones on ground. Lean gently forward over right leg. Feel stretch in right glute and hip flexor. Critical for your PHT injury.' },
+  { name: '90/90 hip stretch (left side)', duration: '45 sec', desc: 'Switch legs. Left leg in front, right leg behind. Lean forward. Maintain even stretch on both sides for balanced recovery.' },
+  { name: 'Quadruped rocks', duration: '10 reps', desc: 'On hands and knees. Rock hips back toward heels, then forward past hands. Keep spine neutral. Don\'t force it—gentle rhythmic movement. Mobilizes hip flexors without stress.' },
+  { name: 'Glute bridges', duration: '12 reps', desc: 'Lie on back, knees bent, feet flat. Squeeze glutes and lift hips until straight line from knees to shoulders. Hold 2 seconds at top. Lower controlled. NO bouncing. Activates glutes to take pressure off hip flexor.' },
+  { name: 'Bird dogs', duration: '8 reps per side', desc: 'On hands and knees. Extend right arm forward and left leg back simultaneously. Hold 3 seconds. Return. Repeat other side. Keep core tight, hips level. Builds core stability for injury prevention.' },
+  { name: 'Plank hold', duration: '20-30 sec', desc: 'Forearms on ground, body straight from head to heels. Engage core, don\'t let hips sag. Breathe normally. Stop if lower back hurts. Core strength protects hip and back.' },
+  { name: 'Quad stretch (standing)', duration: '30 sec per leg', desc: 'Stand, pull right foot toward glute with right hand. Keep knees together. Feel stretch in front of thigh. Hold wall for balance. Repeat left side. Don\'t force—gentle stretch only.' },
+  { name: 'Hamstring stretch (seated)', duration: '30 sec per leg', desc: 'Sit on ground, right leg extended, left leg bent. Reach toward right toes, keep back straight. Feel stretch in back of right thigh. Don\'t round spine. Repeat left side.' }
+];
+ 
+const FOAM_ROLLING = [
+  { name: 'Calves', duration: '30-45 sec per leg', desc: 'Sit on ground, foam roller under right calf. Place left leg on top for pressure. Roll from ankle to below knee. Slow, controlled. Stop on tender spots for 10 sec. Repeat left calf. Reduces tightness from standing/walking all day.' },
+  { name: 'Quads', duration: '30-45 sec per leg', desc: 'Lie face down, roller under right thigh. Support yourself on forearms. Roll from hip to above knee. Avoid rolling directly on hip flexor (too sensitive with your injury). Moderate pressure. Repeat left quad.' },
+  { name: 'IT band', duration: '30-45 sec per leg', desc: 'Lie on right side, roller under right outer thigh (between hip and knee). Use arms to roll slowly up and down. This will be uncomfortable—that\'s normal. Don\'t roll too fast. Repeat left IT band. Reduces hip and knee stress.' },
+  { name: 'Glutes', duration: '30-45 sec per side', desc: 'Sit on roller, cross right ankle over left knee. Lean toward right glute. Roll in small circles. Find tender spots, hold 10 sec. Repeat left glute. Releases tension that pulls on hip flexor.' },
+  { name: 'Upper back (thoracic spine)', duration: '45 sec', desc: 'Lie on back, roller under shoulder blades. Support head with hands. Roll from mid-back to shoulders. DON\'T roll lower back. Improves posture and reduces upper body tension.' }
+];
+ 
+const RECOVERY_TOOLS = [
+  { name: 'Therabody compression boots', duration: '15-20 min', desc: 'Set to Level 1-2 (gentle compression). Sit back, relax. Focus on lower legs and calves. Use after ball work or training. Improves blood flow, reduces inflammation, speeds recovery. Do NOT use if you have DVT or blood clots.' },
+  { name: 'Electric shock therapy (TENS/EMS)', duration: '15 min', desc: 'Place pads on right hip flexor or lower back (ask physio for exact placement). Set to LOW intensity (you should feel tingling, not pain). Start at lowest setting, increase slowly. Stimulates muscles, reduces inflammation. Only use settings your physio approved.' },
+  { name: 'Ice therapy (hip/lower back)', duration: '10-15 min', desc: 'Apply ice pack to right hip flexor or lower back (wherever pain is worst). Use after activity if swelling or sharp pain present. 10-15 min only—never directly on skin (use towel barrier). Reduces inflammation.' },
+  { name: 'Swimming (easy laps)', duration: '15-20 min', desc: 'Easy freestyle only (NO butterfly or breaststroke—they stress hip flexor). Focus on form, not speed. This is ACTIVE RECOVERY, not conditioning. Water supports your weight—zero impact on injury. Ask physio if safe for your injury first.' },
+  { name: 'Easy walking', duration: '15-30 min', desc: 'Flat terrain only (no hills, no inclines). Relaxed pace. This is active recovery—keeps blood flowing without stressing injury. Great for mental reset too.' },
+  { name: 'Contrast bath (hot/cold)', duration: '15 min total', desc: 'Alternate: 3 min warm water (not hot), 1 min cold water. Repeat 3-4 cycles. End on cold. For lower legs/feet only. Reduces inflammation and improves circulation. Ask physio if appropriate for your injury.' }
+];
+ 
+const DAILY_SCHEDULES = {
+  recovery: {
+    monday: [
+      { time: '6:30-7:00 AM', activity: 'Morning mobility routine', desc: 'Complete full stretching routine (20 min). See Stretching tab.' },
+      { time: '8:00-3:00 PM', activity: 'School', desc: 'Do in-school micro-mobility between classes: 90/90 hip stretch, quad stretch, spinal twist (5 min total, 2-3 times during day).' },
+      { time: '3:30-4:00 PM', activity: 'Light ball work', desc: 'Stationary first touch (5 min), passing accuracy (8 min), heading if pain-free (5 min), cool-down touches (7 min). NO running or directional changes.' },
+      { time: '4:00-4:15 PM', activity: 'Post-training recovery', desc: 'Easy walk + light stretching. Hydrate.' },
+      { time: '6:00-6:30 PM', activity: 'Evening recovery session', desc: 'Foam rolling routine (10 min) + stretching (10 min) + breathing (5 min). Ice if needed.' },
+      { time: '9:00 PM', activity: 'Sleep prep', desc: 'Light snack, hydrate, aim for 9+ hours sleep.' }
+    ],
+    tuesday: [
+      { time: '6:30-7:00 AM', activity: 'Morning mobility routine', desc: 'Full stretching routine (20 min).' },
+      { time: '8:00-3:00 PM', activity: 'School', desc: 'In-school micro-mobility (5 min, 2-3 times).' },
+      { time: '3:30-4:00 PM', activity: 'Light ball work', desc: 'Stationary technical work (20-25 min).' },
+      { time: '5:00-6:00 PM', activity: 'Coach recovery session', desc: 'Mobility, strength, stretching with coach. Ask about movements to avoid.' },
+      { time: '6:30-6:45 PM', activity: 'Therabody compression boots', desc: 'Level 1-2, 15 min. Relax and recover.' },
+      { time: '9:00 PM', activity: 'Sleep prep', desc: '9+ hours sleep target.' }
+    ],
+    wednesday: [
+      { time: '6:30-7:00 AM', activity: 'Morning mobility routine', desc: 'Full stretching routine (20 min).' },
+      { time: '8:00-3:00 PM', activity: 'School', desc: 'In-school micro-mobility (5 min, 2-3 times).' },
+      { time: '3:30-4:00 PM', activity: 'Easy swimming', desc: 'Freestyle only, 15-20 min. Easy pace. Ask physio if safe.' },
+      { time: '5:00-6:00 PM', activity: 'Physio session', desc: 'Rehab work. Ask: "What\'s safe for ball work? Ice or heat? Is swimming okay?" Report sharp pain incidents.' },
+      { time: '6:30-7:00 PM', activity: 'Evening recovery', desc: 'Gentle stretching + foam rolling + ice if needed.' },
+      { time: '9:00 PM', activity: 'Sleep prep', desc: '9+ hours sleep.' }
+    ],
+    thursday: [
+      { time: '6:30-7:00 AM', activity: 'Morning mobility routine', desc: 'Full stretching routine (20 min).' },
+      { time: '8:00-3:00 PM', activity: 'School', desc: 'In-school micro-mobility (5 min, 2-3 times).' },
+      { time: '3:30-4:00 PM', activity: 'Light ball work', desc: 'Stationary technical work (20-25 min).' },
+      { time: '5:00-6:00 PM', activity: 'Coach recovery session', desc: 'Recovery focus with coach.' },
+      { time: '6:30-6:45 PM', activity: 'Electric shock therapy', desc: 'Low intensity, 15 min. Hip flexor or lower back (physio-approved placement and settings only).' },
+      { time: '9:00 PM', activity: 'Sleep prep', desc: '9+ hours sleep.' }
+    ],
+    friday: [
+      { time: '6:30-7:00 AM', activity: 'Morning mobility routine', desc: 'Full stretching routine (20 min).' },
+      { time: '8:00-3:00 PM', activity: 'School', desc: 'In-school micro-mobility (5 min, 2-3 times).' },
+      { time: '3:30-4:00 PM', activity: 'Light ball work', desc: 'Stationary work + light lateral shuffles (NO sprinting). 20-25 min.' },
+      { time: '4:00-4:30 PM', activity: 'Easy walk', desc: 'Flat terrain, 15-30 min, relaxed pace.' },
+      { time: '6:00-6:15 PM', activity: 'Foam rolling session', desc: 'Full foam rolling routine (see Foam Rolling tab). 10-15 min.' },
+      { time: '9:00 PM', activity: 'Sleep prep', desc: '9+ hours sleep.' }
+    ],
+    saturday: [
+      { time: '9:00-9:20 AM', activity: 'Light morning mobility', desc: 'Easy stretching (10 min). No aggressive work.' },
+      { time: '10:00-10:20 AM', activity: 'Easy swimming', desc: 'Freestyle, 15-20 min. Very easy pace.' },
+      { time: '11:00-11:25 AM', activity: 'Light ball work', desc: 'Easy touches, 15 min. Low intensity.' },
+      { time: '2:00-2:15 PM', activity: 'Stretching & foam rolling', desc: 'Focus on hip flexor, hamstrings, lower back, calves.' },
+      { time: '3:00-3:15 PM', activity: 'Ice if needed', desc: 'Apply to right hip/lower back if any swelling or pain.' },
+      { time: 'Evening', activity: 'Rest & recovery', desc: 'Watch  footage, meal prep, relax.' },
+      { time: '9:30 PM', activity: 'Sleep prep', desc: '9+ hours sleep.' }
+    ],
+    sunday: [
+      { time: 'Morning', activity: 'Complete rest', desc: 'Light stretching optional (10 min). No structured training.' },
+      { time: 'Afternoon', activity: 'Meal prep', desc: 'Prepare high-protein meals for the week. Hydrate well (3-4 liters daily).' },
+      { time: 'Afternoon', activity: 'Mental visualization', desc: 'Watch  games. Visualize yourself playing healthy and sharp.' },
+      { time: 'Evening', activity: 'Weekly reflection', desc: 'How does hip/back feel? Any lingering sharp pain? Write notes for physio.' },
+      { time: '9:00 PM', activity: 'Sleep prep', desc: '9+ hours sleep. Reset for new week.' }
+    ]
+  },
+  return: {
+    monday: [
+      { time: '6:30-7:00 AM', activity: 'Morning mobility routine', desc: 'Full stretching routine (20 min).' },
+      { time: '8:00-3:00 PM', activity: 'School', desc: 'In-school micro-mobility (5 min, 2-3 times).' },
+      { time: '3:30-3:40 PM', activity: 'Light jogging warm-up', desc: '10 min easy jog. Conversational pace. STOP if sharp pain.' },
+      { time: '3:40-4:05 PM', activity: 'Ball work + passing drills', desc: '25 min. Increased intensity but still controlled.' },
+      { time: '4:05-4:20 PM', activity: 'Recovery walk & stretch', desc: '15 min cool-down walk + stretching.' },
+      { time: '9:00 PM', activity: 'Sleep prep', desc: '8-9 hours sleep.' }
+    ],
+    tuesday: [
+      { time: '6:30-7:00 AM', activity: 'Morning mobility', desc: 'Full routine (20 min).' },
+      { time: '8:00-3:00 PM', activity: 'School', desc: 'Micro-mobility between classes.' },
+      { time: '5:00-6:00 PM', activity: 'Coach session', desc: 'Training focus.' },
+      { time: '6:00-6:20 PM', activity: 'Light ball work', desc: '20 min technical work after coach session.' },
+      { time: '6:30-6:45 PM', activity: 'Therabody boots', desc: '15 min recovery.' },
+      { time: '9:00 PM', activity: 'Sleep', desc: '8-9 hours.' }
+    ],
+    wednesday: [
+      { time: '6:30-7:00 AM', activity: 'Morning mobility', desc: 'Full routine.' },
+      { time: '8:00-3:00 PM', activity: 'School', desc: 'Micro-mobility.' },
+      { time: '3:30-3:50 PM', activity: 'Easy swimming', desc: '20 min freestyle.' },
+      { time: '4:00-4:30 PM', activity: 'Light jogging + ball work', desc: '30 min combined session.' },
+      { time: '6:00-6:15 PM', activity: 'Stretching', desc: '15 min focus on hip/back.' },
+      { time: '9:00 PM', activity: 'Sleep', desc: '8-9 hours.' }
+    ],
+    thursday: [
+      { time: '6:30-6:45 AM', activity: 'Morning mobility', desc: '15 min (slightly reduced).' },
+      { time: '8:00-3:00 PM', activity: 'School', desc: 'Micro-mobility.' },
+      { time: '5:00-6:00 PM', activity: 'Coach session', desc: 'Training work.' },
+      { time: '6:00-6:25 PM', activity: 'Light training session', desc: '25 min.' },
+      { time: '6:30-6:45 PM', activity: 'Electric shock therapy', desc: '15 min (if still needed).' },
+      { time: '9:00 PM', activity: 'Sleep', desc: '8-9 hours.' }
+    ],
+    friday: [
+      { time: '6:30-6:45 AM', activity: 'Morning mobility', desc: '15 min.' },
+      { time: '8:00-3:00 PM', activity: 'School', desc: 'Micro-mobility.' },
+      { time: '3:30-4:05 PM', activity: 'Light-medium intensity session', desc: '35 min. Gradual progression.' },
+      { time: '4:05-4:20 PM', activity: 'Recovery walk & stretch', desc: '15 min cool-down.' },
+      { time: '9:00 PM', activity: 'Sleep', desc: '8-9 hours.' }
+    ],
+    saturday: [
+      { time: '9:00-9:20 AM', activity: 'Optional light training', desc: '20 min if feeling good.' },
+      { time: '10:00-10:20 AM', activity: 'Easy swimming', desc: '20 min recovery swim.' },
+      { time: '11:00-11:15 AM', activity: 'Stretching & mobility', desc: '15 min.' },
+      { time: 'Afternoon', activity: 'Active recovery', desc: 'Walk, light activities.' },
+      { time: '9:00 PM', activity: 'Sleep', desc: '8-9 hours.' }
+    ],
+    sunday: [
+      { time: 'Morning', activity: 'Rest or light walk', desc: 'Complete rest preferred.' },
+      { time: 'Afternoon', activity: 'Meal prep', desc: 'Prepare meals for training week.' },
+      { time: 'Afternoon', activity: 'Mental prep', desc: 'Visualize match scenarios.' },
+      { time: '9:00 PM', activity: 'Sleep', desc: '8-9 hours. Ready for training week.' }
+    ]
+  }
+};
+ 
+let state = {
+  phase: 'recovery',
+  customExercises: { stretch: [], foam: [], recovery: [] },
+  weeklyChecks: {},
+  lastReset: new Date().toDateString()
+};
+ 
+let currentExerciseType = '';
+ 
+function loadState() {
+  const saved = localStorage.getItem('RecoveryState');
+  if (saved) {
+    state = JSON.parse(saved);
+  }
+}
+ 
+function saveState() {
+  localStorage.setItem('RecoveryState', JSON.stringify(state));
+}
+ 
+function getDayOfWeek() {
+  return new Date().getDay();
+}
+ 
+function getBibleVerse() {
+  return BIBLE_VERSES[getDayOfWeek()];
+}
+ 
+function getCurrentDay() {
+  const days = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
+  return days[new Date().getDay()];
+}
+ 
+function switchTab(tab) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+  
+  event.target.classList.add('active');
+  document.getElementById(tab).classList.add('active');
+  
+  if (tab === 'daily') renderDailySchedule();
+  if (tab === 'stretching') renderStretching();
+  if (tab === 'foam') renderFoamRolling();
+  if (tab === 'recovery') renderRecoveryTools();
+  if (tab === 'tracker') renderWeeklyTracker();
+}
+ 
+function renderDailySchedule() {
+  const day = getCurrentDay();
+  const schedule = DAILY_SCHEDULES[state.phase][day];
+  const container = document.getElementById('dailySchedule');
+  
+  const phaseIndicator = document.getElementById('phaseIndicator');
+  phaseIndicator.textContent = state.phase === 'recovery' ? 'Recovery week' : 'Return to training';
+  phaseIndicator.className = `phase-indicator phase-${state.phase}`;
+  
+  container.innerHTML = schedule.map(item => `
+    <div class="schedule-item">
+      <div class="schedule-time">${item.time}</div>
+      <div class="schedule-activity">${item.activity}</div>
+      <div class="schedule-desc">${item.desc}</div>
+    </div>
+  `).join('');
+}
+ 
+function renderStretching() {
+  const allStretches = [...STRETCHES, ...state.customExercises.stretch];
+  const container = document.getElementById('stretchList');
+  
+  container.innerHTML = allStretches.map((ex, i) => `
+    <div class="exercise-item">
+      <div class="exercise-header">
+        <div class="exercise-name">${ex.name}</div>
+        <div class="exercise-duration">${ex.duration}</div>
+      </div>
+      <div class="exercise-desc">${ex.desc}</div>
+      ${i >= STRETCHES.length ? `<button class="btn btn-danger" style="margin-top: 8px;" onclick="deleteCustomExercise('stretch', ${i - STRETCHES.length})">Delete</button>` : ''}
+    </div>
+  `).join('');
+}
+ 
+function renderFoamRolling() {
+  const allFoam = [...FOAM_ROLLING, ...state.customExercises.foam];
+  const container = document.getElementById('foamList');
+  
+  container.innerHTML = allFoam.map((ex, i) => `
+    <div class="exercise-item">
+      <div class="exercise-header">
+        <div class="exercise-name">${ex.name}</div>
+        <div class="exercise-duration">${ex.duration}</div>
+      </div>
+      <div class="exercise-desc">${ex.desc}</div>
+      ${i >= FOAM_ROLLING.length ? `<button class="btn btn-danger" style="margin-top: 8px;" onclick="deleteCustomExercise('foam', ${i - FOAM_ROLLING.length})">Delete</button>` : ''}
+    </div>
+  `).join('');
+}
+ 
+function renderRecoveryTools() {
+  const allRecovery = [...RECOVERY_TOOLS, ...state.customExercises.recovery];
+  const container = document.getElementById('recoveryList');
+  
+  container.innerHTML = allRecovery.map((ex, i) => `
+    <div class="exercise-item">
+      <div class="exercise-header">
+        <div class="exercise-name">${ex.name}</div>
+        <div class="exercise-duration">${ex.duration}</div>
+      </div>
+      <div class="exercise-desc">${ex.desc}</div>
+      ${i >= RECOVERY_TOOLS.length ? `<button class="btn btn-danger" style="margin-top: 8px;" onclick="deleteCustomExercise('recovery', ${i - RECOVERY_TOOLS.length})">Delete</button>` : ''}
+    </div>
+  `).join('');
+}
+ 
+function renderWeeklyTracker() {
+  const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+  const container = document.getElementById('weeklyChecklist');
+  
+  const tasks = {
+    recovery: {
+      Monday: ['Morning mobility', 'School micro-mobility', 'Light ball work', 'Evening recovery', 'Sleep 9+ hours'],
+      Tuesday: ['Morning mobility', 'School micro-mobility', 'Light ball work', 'Coach session', 'Therabody boots', 'Sleep 9+ hours'],
+      Wednesday: ['Morning mobility', 'School micro-mobility', 'Easy swimming', 'Physio session', 'Evening recovery', 'Sleep 9+ hours'],
+      Thursday: ['Morning mobility', 'School micro-mobility', 'Light ball work', 'Coach session', 'Electric shock therapy', 'Sleep 9+ hours'],
+      Friday: ['Morning mobility', 'School micro-mobility', 'Light ball work', 'Easy walk', 'Foam rolling', 'Sleep 9+ hours'],
+      Saturday: ['Light mobility', 'Easy swimming', 'Light ball work', 'Stretching', 'Ice if needed', 'Sleep 9+ hours'],
+      Sunday: ['Rest day', 'Meal prep', 'Visualization', 'Sleep 9+ hours']
+    },
+    return: {
+      Monday: ['Morning mobility', 'School micro-mobility', 'Light jog warm-up', 'Ball work', 'Recovery walk', 'Sleep 8-9 hours'],
+      Tuesday: ['Morning mobility', 'School micro-mobility', 'Coach session', 'Light ball work', 'Therabody boots', 'Sleep 8-9 hours'],
+      Wednesday: ['Morning mobility', 'School micro-mobility', 'Easy swimming', 'Light jogging + ball work', 'Stretching', 'Sleep 8-9 hours'],
+      Thursday: ['Morning mobility', 'School micro-mobility', 'Coach session', 'Light training', 'Electric shock therapy', 'Sleep 8-9 hours'],
+      Friday: ['Morning mobility', 'School micro-mobility', 'Light-medium session', 'Recovery walk', 'Sleep 8-9 hours'],
+      Saturday: ['Optional training', 'Easy swimming', 'Stretching', 'Sleep 8-9 hours'],
+      Sunday: ['Rest day', 'Meal prep', 'Visualization', 'Sleep 8-9 hours']
+    }
+  };
+  
+  const currentTasks = tasks[state.phase];
+  let totalTasks = 0;
+  let completedTasks = 0;
+  let completedDays = 0;
+  
+  container.innerHTML = days.map(day => {
+    const dayTasks = currentTasks[day];
+    totalTasks += dayTasks.length;
+    let dayCompleted = 0;
+    
+    const taskHtml = dayTasks.map((task, i) => {
+      const key = `${day}-${i}`;
+      const checked = state.weeklyChecks[key] || false;
+      if (checked) {
+        completedTasks++;
+        dayCompleted++;
+      }
+      
+      return `
+        <div class="checklist-item ${checked ? 'checked' : ''}">
+          <input type="checkbox" ${checked ? 'checked' : ''} onchange="toggleTask('${key}')">
+          <div class="checklist-text">${task}</div>
+        </div>
+      `;
+    }).join('');
+    
+    if (dayCompleted === dayTasks.length) completedDays++;
+    
+    return `
+      <div class="card">
+        <h2>${day} <span style="font-size: 14px; color: #999; font-weight: normal;">(${dayCompleted}/${dayTasks.length})</span></h2>
+        <div class="checklist">${taskHtml}</div>
+      </div>
+    `;
+  }).join('');
+  
+  const progress = totalTasks > 0 ? Math.round((completedTasks / totalTasks) * 100) : 0;
+  document.getElementById('weekProgress').textContent = `${progress}%`;
+  document.getElementById('tasksDone').textContent = `${completedTasks}/${totalTasks}`;
+  document.getElementById('daysComplete').textContent = `${completedDays}/7`;
+}
+ 
+function toggleTask(key) {
+  state.weeklyChecks[key] = !state.weeklyChecks[key];
+  saveState();
+  renderWeeklyTracker();
+}
+ 
+function changePhase(phase) {
+  state.phase = phase;
+  saveState();
+  renderDailySchedule();
+  renderWeeklyTracker();
+}
+ 
+function resetWeek() {
+  if (confirm('Reset all checkboxes for a new week?')) {
+    state.weeklyChecks = {};
+    state.lastReset = new Date().toDateString();
+    saveState();
+    renderWeeklyTracker();
+  }
+}
+ 
+function openAddExercise(type) {
+  currentExerciseType = type;
+  const titles = { stretch: 'Add custom stretch', foam: 'Add custom foam rolling area', recovery: 'Add custom recovery tool' };
+  document.getElementById('modalTitle').textContent = titles[type];
+  document.getElementById('exerciseName').value = '';
+  document.getElementById('exerciseDuration').value = '';
+  document.getElementById('exerciseDesc').value = '';
+  document.getElementById('addExerciseModal').classList.add('active');
+}
+ 
+function closeAddExercise() {
+  document.getElementById('addExerciseModal').classList.remove('active');
+}
+ 
+function saveCustomExercise() {
+  const name = document.getElementById('exerciseName').value.trim();
+  const duration = document.getElementById('exerciseDuration').value.trim();
+  const desc = document.getElementById('exerciseDesc').value.trim();
+  
+  if (!name || !duration || !desc) {
+    alert('Please fill in all fields');
+    return;
+  }
+  
+  state.customExercises[currentExerciseType].push({ name, duration, desc });
+  saveState();
+  closeAddExercise();
+  
+  if (currentExerciseType === 'stretch') renderStretching();
+  if (currentExerciseType === 'foam') renderFoamRolling();
+  if (currentExerciseType === 'recovery') renderRecoveryTools();
+}
+ 
+function deleteCustomExercise(type, index) {
+  if (confirm('Delete this exercise?')) {
+    state.customExercises[type].splice(index, 1);
+    saveState();
+    
+    if (type === 'stretch') renderStretching();
+    if (type === 'foam') renderFoamRolling();
+    if (type === 'recovery') renderRecoveryTools();
+  }
+}
+ 
+function init() {
+  loadState();
+  document.getElementById('bibleVerse').textContent = getBibleVerse();
+  renderDailySchedule();
+  renderStretching();
+  renderFoamRolling();
+  renderRecoveryTools();
+  renderWeeklyTracker();
+}
+ 
+init();
+</script>
+ 
 </body>
 </html>
