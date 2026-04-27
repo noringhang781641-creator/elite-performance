@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title> Recovery - PHT Injury</title>
+  <title>recvr. Training System</title>
   <style>
     * {
       margin: 0;
@@ -11,79 +11,121 @@
       box-sizing: border-box;
     }
     
+    :root {
+      --primary: #6366f1;
+      --primary-dark: #4f46e5;
+      --secondary: #ec4899;
+      --success: #10b981;
+      --warning: #f59e0b;
+      --danger: #ef4444;
+      --recovery: #8b5cf6;
+      --training: #3b82f6;
+      --bg-primary: #0f172a;
+      --bg-secondary: #1e293b;
+      --bg-tertiary: #334155;
+      --text-primary: #f8fafc;
+      --text-secondary: #cbd5e1;
+      --border: #475569;
+    }
+    
     body {
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      background: #f5f5f5;
-      color: #1a1a1a;
+      background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+      color: var(--text-primary);
       line-height: 1.6;
+      min-height: 100vh;
     }
     
     .container {
-      max-width: 900px;
+      max-width: 1200px;
       margin: 0 auto;
-      padding: 12px;
+      padding: 16px;
     }
     
     .header {
-      background: white;
-      padding: 20px;
-      border-radius: 12px;
-      margin-bottom: 16px;
-      border: 0.5px solid #e0e0e0;
+      background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+      padding: 24px;
+      border-radius: 16px;
+      margin-bottom: 20px;
+      box-shadow: 0 10px 40px rgba(99, 102, 241, 0.3);
     }
     
     .header h1 {
-      font-size: 26px;
-      margin-bottom: 6px;
-      color: #1a1a1a;
+      font-size: 28px;
+      margin-bottom: 8px;
+      background: linear-gradient(to right, #fff, #e0e7ff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
     }
     
     .header .tagline {
       font-size: 14px;
-      color: #666;
+      color: rgba(255, 255, 255, 0.8);
       font-weight: 500;
       margin-bottom: 12px;
     }
     
     .bible-verse {
-      background: linear-gradient(135deg, #f3e5ab 0%, #fef9e7 100%);
-      border-left: 4px solid #d4af37;
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      border-left: 4px solid rgba(255, 255, 255, 0.3);
       padding: 12px;
-      border-radius: 6px;
+      border-radius: 8px;
       font-size: 13px;
       font-style: italic;
-      color: #5a5a2a;
+      color: rgba(255, 255, 255, 0.9);
       line-height: 1.6;
+    }
+    
+    .mode-badge {
+      display: inline-block;
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 12px;
+      background: linear-gradient(135deg, var(--recovery) 0%, var(--secondary) 100%);
+      box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3);
+    }
+    
+    .mode-badge.training {
+      background: linear-gradient(135deg, var(--training) 0%, var(--primary) 100%);
+      box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
     }
     
     .tabs {
       display: flex;
       gap: 8px;
-      margin-bottom: 16px;
+      margin-bottom: 20px;
       overflow-x: auto;
       padding-bottom: 4px;
     }
     
     .tab {
-      padding: 10px 16px;
-      border: 0.5px solid #d0d0d0;
-      border-radius: 8px;
-      background: white;
+      padding: 12px 20px;
+      border: 2px solid var(--border);
+      border-radius: 12px;
+      background: var(--bg-secondary);
       cursor: pointer;
       font-size: 14px;
-      font-weight: 500;
-      transition: all 0.2s;
+      font-weight: 600;
+      transition: all 0.3s;
       white-space: nowrap;
+      color: var(--text-secondary);
     }
     
     .tab:hover {
-      background: #f0f0f0;
+      border-color: var(--primary);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 15px rgba(99, 102, 241, 0.2);
     }
     
     .tab.active {
-      background: #2563eb;
+      background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
       color: white;
-      border-color: #2563eb;
+      border-color: transparent;
+      box-shadow: 0 4px 20px rgba(99, 102, 241, 0.4);
     }
     
     .tab-content {
@@ -92,119 +134,201 @@
     
     .tab-content.active {
       display: block;
+      animation: fadeIn 0.3s;
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
     }
     
     .card {
-      background: white;
-      border: 0.5px solid #e0e0e0;
-      border-radius: 12px;
-      padding: 16px;
-      margin-bottom: 12px;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 20px;
+      margin-bottom: 16px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
     }
     
     .card h2 {
-      font-size: 18px;
-      margin-bottom: 12px;
-      color: #1a1a1a;
-      border-bottom: 0.5px solid #e0e0e0;
+      font-size: 20px;
+      margin-bottom: 16px;
+      background: linear-gradient(to right, var(--text-primary), var(--primary));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      border-bottom: 2px solid var(--border);
       padding-bottom: 8px;
     }
     
     .card h3 {
-      font-size: 15px;
-      margin: 12px 0 8px;
-      color: #1a1a1a;
+      font-size: 16px;
+      margin: 16px 0 12px;
+      color: var(--text-primary);
     }
     
-    .schedule-item {
-      background: #f9f9f9;
-      border-left: 3px solid #2563eb;
+    .week-selector {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+    
+    .day-selector {
+      background: var(--bg-tertiary);
+      border: 2px solid var(--border);
+      border-radius: 12px;
       padding: 12px;
-      margin-bottom: 8px;
-      border-radius: 4px;
+      cursor: pointer;
+      transition: all 0.3s;
+      text-align: center;
     }
     
-    .schedule-time {
-      font-size: 12px;
-      color: #2563eb;
+    .day-selector:hover {
+      border-color: var(--primary);
+      transform: translateY(-2px);
+    }
+    
+    .day-selector.recovery {
+      background: linear-gradient(135deg, rgba(139, 92, 246, 0.2) 0%, rgba(236, 72, 153, 0.2) 100%);
+      border-color: var(--recovery);
+    }
+    
+    .day-selector.training {
+      background: linear-gradient(135deg, rgba(59, 130, 246, 0.2) 0%, rgba(99, 102, 241, 0.2) 100%);
+      border-color: var(--training);
+    }
+    
+    .day-name {
+      font-size: 14px;
       font-weight: 600;
       margin-bottom: 4px;
     }
     
+    .day-mode {
+      font-size: 12px;
+      color: var(--text-secondary);
+    }
+    
+    .schedule-item {
+      background: linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, rgba(236, 72, 153, 0.1) 100%);
+      border-left: 4px solid var(--primary);
+      padding: 16px;
+      margin-bottom: 12px;
+      border-radius: 8px;
+      transition: all 0.3s;
+    }
+    
+    .schedule-item:hover {
+      transform: translateX(4px);
+      box-shadow: 0 4px 15px rgba(99, 102, 241, 0.2);
+    }
+    
+    .schedule-item.recovery-item {
+      border-left-color: var(--recovery);
+      background: linear-gradient(135deg, rgba(139, 92, 246, 0.1) 0%, rgba(236, 72, 153, 0.1) 100%);
+    }
+    
+    .schedule-time {
+      font-size: 12px;
+      color: var(--primary);
+      font-weight: 700;
+      margin-bottom: 6px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    
     .schedule-activity {
-      font-size: 14px;
-      font-weight: 500;
-      margin-bottom: 4px;
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 6px;
+      color: var(--text-primary);
     }
     
     .schedule-desc {
-      font-size: 13px;
-      color: #666;
+      font-size: 14px;
+      color: var(--text-secondary);
       line-height: 1.5;
     }
     
-    .exercise-list {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
+    .exercise-item {
+      background: var(--bg-tertiary);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 12px;
+      transition: all 0.3s;
     }
     
-    .exercise-item {
-      background: #f9f9f9;
-      border: 0.5px solid #efefef;
-      border-radius: 8px;
-      padding: 12px;
+    .exercise-item:hover {
+      border-color: var(--primary);
+      box-shadow: 0 4px 15px rgba(99, 102, 241, 0.2);
     }
     
     .exercise-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 8px;
+      margin-bottom: 10px;
     }
     
     .exercise-name {
-      font-size: 14px;
-      font-weight: 500;
-      color: #1a1a1a;
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--text-primary);
     }
     
     .exercise-duration {
-      font-size: 12px;
-      color: #2563eb;
-      font-weight: 500;
+      font-size: 13px;
+      color: var(--secondary);
+      font-weight: 600;
+      background: rgba(236, 72, 153, 0.1);
+      padding: 4px 12px;
+      border-radius: 20px;
     }
     
     .exercise-desc {
-      font-size: 13px;
-      color: #555;
-      line-height: 1.5;
+      font-size: 14px;
+      color: var(--text-secondary);
+      line-height: 1.6;
     }
     
-    .checklist {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
+    .exercise-category {
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin: 20px 0 12px;
+      padding-left: 12px;
+      border-left: 4px solid var(--primary);
     }
     
     .checklist-item {
-      background: #f9f9f9;
-      border: 0.5px solid #efefef;
+      background: var(--bg-tertiary);
+      border: 1px solid var(--border);
       border-radius: 8px;
-      padding: 12px;
+      padding: 14px;
       display: flex;
       align-items: center;
       gap: 12px;
+      margin-bottom: 8px;
+      transition: all 0.3s;
+    }
+    
+    .checklist-item:hover {
+      border-color: var(--primary);
     }
     
     .checklist-item input[type="checkbox"] {
-      width: 20px;
-      height: 20px;
+      width: 22px;
+      height: 22px;
       cursor: pointer;
+      accent-color: var(--primary);
     }
     
     .checklist-item.checked {
       opacity: 0.5;
+      background: rgba(16, 185, 129, 0.1);
     }
     
     .checklist-item.checked .checklist-text {
@@ -214,200 +338,195 @@
     .checklist-text {
       flex: 1;
       font-size: 14px;
+      color: var(--text-primary);
     }
     
     .btn {
-      padding: 10px 16px;
-      border: 0.5px solid #d0d0d0;
-      border-radius: 8px;
-      background: white;
+      padding: 12px 24px;
+      border: 2px solid var(--border);
+      border-radius: 12px;
+      background: var(--bg-secondary);
       cursor: pointer;
       font-size: 14px;
-      font-weight: 500;
-      transition: all 0.2s;
+      font-weight: 600;
+      transition: all 0.3s;
       display: inline-block;
+      color: var(--text-primary);
     }
     
     .btn:hover {
-      background: #f0f0f0;
+      border-color: var(--primary);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
     }
     
     .btn-primary {
-      background: #2563eb;
+      background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
       color: white;
-      border-color: #2563eb;
+      border-color: transparent;
     }
     
     .btn-primary:hover {
-      background: #1d4ed8;
+      box-shadow: 0 6px 20px rgba(99, 102, 241, 0.4);
+    }
+    
+    .btn-success {
+      background: linear-gradient(135deg, var(--success) 0%, #059669 100%);
+      color: white;
+      border-color: transparent;
     }
     
     .btn-danger {
-      background: #ef4444;
+      background: linear-gradient(135deg, var(--danger) 0%, #dc2626 100%);
       color: white;
-      border-color: #ef4444;
-    }
-    
-    .btn-danger:hover {
-      background: #dc2626;
-    }
-    
-    .input-group {
-      margin-bottom: 12px;
-    }
-    
-    .input-group label {
-      display: block;
-      font-size: 13px;
-      font-weight: 500;
-      margin-bottom: 6px;
-      color: #555;
-    }
-    
-    .input-group input,
-    .input-group textarea {
-      width: 100%;
-      padding: 10px;
-      border: 0.5px solid #d0d0d0;
-      border-radius: 6px;
-      font-size: 14px;
-      font-family: inherit;
-    }
-    
-    .input-group textarea {
-      resize: vertical;
-      min-height: 80px;
+      border-color: transparent;
     }
     
     .stats {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-      gap: 12px;
-      margin-bottom: 16px;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 16px;
+      margin-bottom: 20px;
     }
     
     .stat-card {
-      background: white;
-      border: 0.5px solid #e0e0e0;
-      border-radius: 8px;
-      padding: 16px;
+      background: linear-gradient(135deg, var(--bg-tertiary) 0%, var(--bg-secondary) 100%);
+      border: 2px solid var(--border);
+      border-radius: 16px;
+      padding: 20px;
       text-align: center;
+      transition: all 0.3s;
+    }
+    
+    .stat-card:hover {
+      border-color: var(--primary);
+      transform: translateY(-4px);
+      box-shadow: 0 8px 25px rgba(99, 102, 241, 0.3);
     }
     
     .stat-label {
       font-size: 12px;
-      color: #999;
+      color: var(--text-secondary);
       margin-bottom: 8px;
       text-transform: uppercase;
-      letter-spacing: 0.5px;
+      letter-spacing: 1px;
     }
     
     .stat-value {
-      font-size: 24px;
-      font-weight: 600;
-      color: #2563eb;
+      font-size: 32px;
+      font-weight: 700;
+      background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
     }
     
-    .modal {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0,0,0,0.5);
-      z-index: 1000;
-      overflow-y: auto;
+    .weekly-overview {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 12px;
+      margin-bottom: 20px;
     }
     
-    .modal.active {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 20px;
-    }
-    
-    .modal-content {
-      background: white;
+    .week-day-card {
+      background: var(--bg-tertiary);
+      border: 2px solid var(--border);
       border-radius: 12px;
-      padding: 20px;
-      max-width: 500px;
-      width: 100%;
-    }
-    
-    .modal-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 16px;
-      padding-bottom: 12px;
-      border-bottom: 0.5px solid #e0e0e0;
-    }
-    
-    .modal-header h3 {
-      font-size: 18px;
-      margin: 0;
-    }
-    
-    .modal-close {
-      font-size: 24px;
+      padding: 16px;
+      text-align: center;
+      transition: all 0.3s;
       cursor: pointer;
-      color: #999;
     }
     
-    .custom-exercises {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      margin-bottom: 12px;
+    .week-day-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 6px 20px rgba(99, 102, 241, 0.3);
     }
     
-    .custom-exercise {
-      background: #f9f9f9;
-      border: 0.5px solid #efefef;
-      border-radius: 8px;
-      padding: 12px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
+    .week-day-card.active {
+      border-color: var(--primary);
+      background: linear-gradient(135deg, rgba(99, 102, 241, 0.2) 0%, rgba(236, 72, 153, 0.2) 100%);
+    }
+    
+    .week-day-card.recovery {
+      border-color: var(--recovery);
+    }
+    
+    .week-day-card.training {
+      border-color: var(--training);
+    }
+    
+    .week-day-name {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 6px;
+      color: var(--text-primary);
+    }
+    
+    .week-day-type {
+      font-size: 12px;
+      padding: 4px 12px;
+      border-radius: 12px;
+      display: inline-block;
+    }
+    
+    .week-day-type.recovery {
+      background: rgba(139, 92, 246, 0.2);
+      color: var(--recovery);
+    }
+    
+    .week-day-type.training {
+      background: rgba(59, 130, 246, 0.2);
+      color: var(--training);
     }
     
     .alert {
-      background: #fef3c7;
-      border-left: 4px solid #f59e0b;
-      padding: 12px;
-      border-radius: 6px;
-      margin-bottom: 12px;
-      font-size: 13px;
-      color: #92400e;
+      background: linear-gradient(135deg, rgba(245, 158, 11, 0.1) 0%, rgba(251, 146, 60, 0.1) 100%);
+      border-left: 4px solid var(--warning);
+      padding: 16px;
+      border-radius: 8px;
+      margin-bottom: 16px;
+      font-size: 14px;
+      color: var(--text-secondary);
     }
     
-    .phase-indicator {
-      display: inline-block;
-      padding: 4px 12px;
-      border-radius: 4px;
-      font-size: 12px;
-      font-weight: 500;
-      margin-bottom: 12px;
+    .alert strong {
+      color: var(--text-primary);
     }
     
-    .phase-recovery {
-      background: #fef3c7;
-      color: #92400e;
+    .search-box {
+      width: 100%;
+      padding: 12px 16px;
+      border: 2px solid var(--border);
+      border-radius: 12px;
+      background: var(--bg-tertiary);
+      font-size: 14px;
+      color: var(--text-primary);
+      margin-bottom: 16px;
+      transition: all 0.3s;
     }
     
-    .phase-return {
-      background: #d1fae5;
-      color: #065f46;
+    .search-box:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 20px rgba(99, 102, 241, 0.3);
     }
     
-    @media (max-width: 600px) {
+    .search-box::placeholder {
+      color: var(--text-secondary);
+    }
+    
+    @media (max-width: 768px) {
       .container {
-        padding: 8px;
+        padding: 12px;
       }
       
       .header {
-        padding: 16px;
+        padding: 20px;
+      }
+      
+      .header h1 {
+        font-size: 24px;
       }
       
       .tabs {
@@ -415,73 +534,64 @@
       }
       
       .tab {
-        padding: 8px 12px;
+        padding: 10px 16px;
         font-size: 13px;
+      }
+      
+      .stat-value {
+        font-size: 24px;
       }
     }
   </style>
 </head>
 <body>
- 
+
 <div class="container">
   <div class="header">
-    <h1> Recovery</h1>
+    <h1>⚽ recvr. Training System</h1>
     <p class="tagline">Be smart. Work hard.</p>
+    <div class="mode-badge" id="modeBadge">Recovery Mode</div>
     <div class="bible-verse" id="bibleVerse"></div>
   </div>
   
   <div class="tabs">
-    <div class="tab active" onclick="switchTab('daily')">Daily schedule</div>
-    <div class="tab" onclick="switchTab('stretching')">Stretching</div>
-    <div class="tab" onclick="switchTab('foam')">Foam rolling</div>
-    <div class="tab" onclick="switchTab('recovery')">Recovery tools</div>
-    <div class="tab" onclick="switchTab('tracker')">Weekly tracker</div>
+    <div class="tab active" onclick="switchTab('daily')">📅 Daily</div>
+    <div class="tab" onclick="switchTab('planner')">📋 Week planner</div>
+    <div class="tab" onclick="switchTab('exercises')">💪 Exercise guide</div>
+    <div class="tab" onclick="switchTab('tracker')">✅ Tracker</div>
   </div>
   
+  <!-- DAILY SCHEDULE TAB -->
   <div id="daily" class="tab-content active">
+    <div class="weekly-overview" id="weeklyOverview"></div>
+    
     <div class="card">
-      <h2>Today's schedule</h2>
-      <div class="phase-indicator phase-recovery" id="phaseIndicator">Recovery week</div>
+      <h2 id="dailyTitle">Today's schedule</h2>
       <div id="dailySchedule"></div>
     </div>
   </div>
   
-  <div id="stretching" class="tab-content">
+  <!-- WEEK PLANNER TAB -->
+  <div id="planner" class="tab-content">
     <div class="card">
-      <h2>Stretching routines</h2>
-      <button class="btn btn-primary" onclick="openAddExercise('stretch')" style="margin-bottom: 12px;">+ Add custom stretch</button>
-      
-      <h3>Morning mobility (20 min total)</h3>
-      <div class="exercise-list" id="stretchList"></div>
-      
-      <div class="alert">
-        <strong>Key principles:</strong> Hold each stretch 30-45 sec. Never bounce. Breathe deeply. Stop if sharp pain.
-      </div>
+      <h2>Plan your week</h2>
+      <p style="color: var(--text-secondary); margin-bottom: 16px;">Select which days are recovery days. Training days will automatically use your workout plan.</p>
+      <div class="week-selector" id="weekPlannerSelector"></div>
+      <button class="btn btn-success" onclick="saveWeekPlan()" style="margin-top: 16px;">💾 Save week plan</button>
     </div>
   </div>
   
-  <div id="foam" class="tab-content">
+  <!-- EXERCISE GUIDE TAB -->
+  <div id="exercises" class="tab-content">
     <div class="card">
-      <h2>Foam rolling protocol</h2>
-      <button class="btn btn-primary" onclick="openAddExercise('foam')" style="margin-bottom: 12px;">+ Add custom area</button>
+      <h2>Exercise & stretch library</h2>
+      <input type="text" class="search-box" id="exerciseSearch" placeholder="🔍 Search exercises or stretches..." onkeyup="filterExercises()">
       
-      <div class="exercise-list" id="foamList"></div>
-      
-      <div class="alert">
-        <strong>Key principles:</strong> Roll slowly (1 inch per second). Avoid rolling directly on joints or spine. 30-45 sec per area. Moderate pressure only.
-      </div>
+      <div id="exerciseList"></div>
     </div>
   </div>
   
-  <div id="recovery" class="tab-content">
-    <div class="card">
-      <h2>Recovery tools & protocols</h2>
-      <button class="btn btn-primary" onclick="openAddExercise('recovery')" style="margin-bottom: 12px;">+ Add custom tool</button>
-      
-      <div class="exercise-list" id="recoveryList"></div>
-    </div>
-  </div>
-  
+  <!-- TRACKER TAB -->
   <div id="tracker" class="tab-content">
     <div class="stats">
       <div class="stat-card">
@@ -490,7 +600,7 @@
       </div>
       <div class="stat-card">
         <div class="stat-label">Tasks done</div>
-        <div class="stat-value" id="tasksDone">0/42</div>
+        <div class="stat-value" id="tasksDone">0/50</div>
       </div>
       <div class="stat-card">
         <div class="stat-label">Days complete</div>
@@ -500,38 +610,12 @@
     
     <div class="card">
       <h2>Weekly checklist</h2>
-      <div style="display: flex; gap: 8px; margin-bottom: 12px;">
-        <button class="btn" onclick="changePhase('recovery')">Recovery week</button>
-        <button class="btn" onclick="changePhase('return')">Return to training</button>
-        <button class="btn btn-danger" onclick="resetWeek()">Reset week</button>
-      </div>
+      <button class="btn btn-danger" onclick="resetWeek()" style="margin-bottom: 16px;">🔄 Reset week</button>
       <div id="weeklyChecklist"></div>
     </div>
   </div>
 </div>
- 
-<div id="addExerciseModal" class="modal">
-  <div class="modal-content">
-    <div class="modal-header">
-      <h3 id="modalTitle">Add exercise</h3>
-      <span class="modal-close" onclick="closeAddExercise()">&times;</span>
-    </div>
-    <div class="input-group">
-      <label>Exercise name</label>
-      <input type="text" id="exerciseName" placeholder="e.g., Hamstring stretch">
-    </div>
-    <div class="input-group">
-      <label>Duration</label>
-      <input type="text" id="exerciseDuration" placeholder="e.g., 45 sec or 10 reps">
-    </div>
-    <div class="input-group">
-      <label>Description</label>
-      <textarea id="exerciseDesc" placeholder="How to perform this exercise..."></textarea>
-    </div>
-    <button class="btn btn-primary" onclick="saveCustomExercise()">Save</button>
-  </div>
-</div>
- 
+
 <script>
 const BIBLE_VERSES = [
   '"I can do all this through him who gives me strength." – Philippians 4:13',
@@ -542,185 +626,264 @@ const BIBLE_VERSES = [
   '"His grace is sufficient for me, for his power is made perfect in weakness." – 2 Corinthians 12:9',
   '"Trust in the Lord with all your heart and lean not on your own understanding." – Proverbs 3:5'
 ];
- 
-const STRETCHES = [
-  { name: 'Diaphragmatic breathing', duration: '2 min', desc: 'Lie on back or sit comfortably. Place one hand on chest, one on belly. Breathe in through nose (4 counts), belly rises. Hold (4 counts). Breathe out through mouth (6 counts). Repeat 5-8 times. Calms nervous system and prepares body for movement.' },
-  { name: 'Cat-cow stretch', duration: '10 reps', desc: 'On hands and knees. Inhale: arch back, lift head and tailbone (cow). Exhale: round spine, tuck chin and tailbone (cat). Move slowly and controlled. Mobilizes entire spine and reduces lower back tension.' },
-  { name: '90/90 hip stretch (right side)', duration: '45 sec', desc: 'Sit on floor. Right leg bent in front at 90 degrees, left leg bent behind at 90 degrees. Keep both sit bones on ground. Lean gently forward over right leg. Feel stretch in right glute and hip flexor. Critical for your PHT injury.' },
-  { name: '90/90 hip stretch (left side)', duration: '45 sec', desc: 'Switch legs. Left leg in front, right leg behind. Lean forward. Maintain even stretch on both sides for balanced recovery.' },
-  { name: 'Quadruped rocks', duration: '10 reps', desc: 'On hands and knees. Rock hips back toward heels, then forward past hands. Keep spine neutral. Don\'t force it—gentle rhythmic movement. Mobilizes hip flexors without stress.' },
-  { name: 'Glute bridges', duration: '12 reps', desc: 'Lie on back, knees bent, feet flat. Squeeze glutes and lift hips until straight line from knees to shoulders. Hold 2 seconds at top. Lower controlled. NO bouncing. Activates glutes to take pressure off hip flexor.' },
-  { name: 'Bird dogs', duration: '8 reps per side', desc: 'On hands and knees. Extend right arm forward and left leg back simultaneously. Hold 3 seconds. Return. Repeat other side. Keep core tight, hips level. Builds core stability for injury prevention.' },
-  { name: 'Plank hold', duration: '20-30 sec', desc: 'Forearms on ground, body straight from head to heels. Engage core, don\'t let hips sag. Breathe normally. Stop if lower back hurts. Core strength protects hip and back.' },
-  { name: 'Quad stretch (standing)', duration: '30 sec per leg', desc: 'Stand, pull right foot toward glute with right hand. Keep knees together. Feel stretch in front of thigh. Hold wall for balance. Repeat left side. Don\'t force—gentle stretch only.' },
-  { name: 'Hamstring stretch (seated)', duration: '30 sec per leg', desc: 'Sit on ground, right leg extended, left leg bent. Reach toward right toes, keep back straight. Feel stretch in back of right thigh. Don\'t round spine. Repeat left side.' }
-];
- 
-const FOAM_ROLLING = [
-  { name: 'Calves', duration: '30-45 sec per leg', desc: 'Sit on ground, foam roller under right calf. Place left leg on top for pressure. Roll from ankle to below knee. Slow, controlled. Stop on tender spots for 10 sec. Repeat left calf. Reduces tightness from standing/walking all day.' },
-  { name: 'Quads', duration: '30-45 sec per leg', desc: 'Lie face down, roller under right thigh. Support yourself on forearms. Roll from hip to above knee. Avoid rolling directly on hip flexor (too sensitive with your injury). Moderate pressure. Repeat left quad.' },
-  { name: 'IT band', duration: '30-45 sec per leg', desc: 'Lie on right side, roller under right outer thigh (between hip and knee). Use arms to roll slowly up and down. This will be uncomfortable—that\'s normal. Don\'t roll too fast. Repeat left IT band. Reduces hip and knee stress.' },
-  { name: 'Glutes', duration: '30-45 sec per side', desc: 'Sit on roller, cross right ankle over left knee. Lean toward right glute. Roll in small circles. Find tender spots, hold 10 sec. Repeat left glute. Releases tension that pulls on hip flexor.' },
-  { name: 'Upper back (thoracic spine)', duration: '45 sec', desc: 'Lie on back, roller under shoulder blades. Support head with hands. Roll from mid-back to shoulders. DON\'T roll lower back. Improves posture and reduces upper body tension.' }
-];
- 
-const RECOVERY_TOOLS = [
-  { name: 'Therabody compression boots', duration: '15-20 min', desc: 'Set to Level 1-2 (gentle compression). Sit back, relax. Focus on lower legs and calves. Use after ball work or training. Improves blood flow, reduces inflammation, speeds recovery. Do NOT use if you have DVT or blood clots.' },
-  { name: 'Electric shock therapy (TENS/EMS)', duration: '15 min', desc: 'Place pads on right hip flexor or lower back (ask physio for exact placement). Set to LOW intensity (you should feel tingling, not pain). Start at lowest setting, increase slowly. Stimulates muscles, reduces inflammation. Only use settings your physio approved.' },
-  { name: 'Ice therapy (hip/lower back)', duration: '10-15 min', desc: 'Apply ice pack to right hip flexor or lower back (wherever pain is worst). Use after activity if swelling or sharp pain present. 10-15 min only—never directly on skin (use towel barrier). Reduces inflammation.' },
-  { name: 'Swimming (easy laps)', duration: '15-20 min', desc: 'Easy freestyle only (NO butterfly or breaststroke—they stress hip flexor). Focus on form, not speed. This is ACTIVE RECOVERY, not conditioning. Water supports your weight—zero impact on injury. Ask physio if safe for your injury first.' },
-  { name: 'Easy walking', duration: '15-30 min', desc: 'Flat terrain only (no hills, no inclines). Relaxed pace. This is active recovery—keeps blood flowing without stressing injury. Great for mental reset too.' },
-  { name: 'Contrast bath (hot/cold)', duration: '15 min total', desc: 'Alternate: 3 min warm water (not hot), 1 min cold water. Repeat 3-4 cycles. End on cold. For lower legs/feet only. Reduces inflammation and improves circulation. Ask physio if appropriate for your injury.' }
-];
- 
-const DAILY_SCHEDULES = {
-  recovery: {
-    monday: [
-      { time: '6:30-7:00 AM', activity: 'Morning mobility routine', desc: 'Complete full stretching routine (20 min). See Stretching tab.' },
-      { time: '8:00-3:00 PM', activity: 'School', desc: 'Do in-school micro-mobility between classes: 90/90 hip stretch, quad stretch, spinal twist (5 min total, 2-3 times during day).' },
-      { time: '3:30-4:00 PM', activity: 'Light ball work', desc: 'Stationary first touch (5 min), passing accuracy (8 min), heading if pain-free (5 min), cool-down touches (7 min). NO running or directional changes.' },
-      { time: '4:00-4:15 PM', activity: 'Post-training recovery', desc: 'Easy walk + light stretching. Hydrate.' },
-      { time: '6:00-6:30 PM', activity: 'Evening recovery session', desc: 'Foam rolling routine (10 min) + stretching (10 min) + breathing (5 min). Ice if needed.' },
-      { time: '9:00 PM', activity: 'Sleep prep', desc: 'Light snack, hydrate, aim for 9+ hours sleep.' }
-    ],
-    tuesday: [
-      { time: '6:30-7:00 AM', activity: 'Morning mobility routine', desc: 'Full stretching routine (20 min).' },
-      { time: '8:00-3:00 PM', activity: 'School', desc: 'In-school micro-mobility (5 min, 2-3 times).' },
-      { time: '3:30-4:00 PM', activity: 'Light ball work', desc: 'Stationary technical work (20-25 min).' },
-      { time: '5:00-6:00 PM', activity: 'Coach recovery session', desc: 'Mobility, strength, stretching with coach. Ask about movements to avoid.' },
-      { time: '6:30-6:45 PM', activity: 'Therabody compression boots', desc: 'Level 1-2, 15 min. Relax and recover.' },
-      { time: '9:00 PM', activity: 'Sleep prep', desc: '9+ hours sleep target.' }
-    ],
-    wednesday: [
-      { time: '6:30-7:00 AM', activity: 'Morning mobility routine', desc: 'Full stretching routine (20 min).' },
-      { time: '8:00-3:00 PM', activity: 'School', desc: 'In-school micro-mobility (5 min, 2-3 times).' },
-      { time: '3:30-4:00 PM', activity: 'Easy swimming', desc: 'Freestyle only, 15-20 min. Easy pace. Ask physio if safe.' },
-      { time: '5:00-6:00 PM', activity: 'Physio session', desc: 'Rehab work. Ask: "What\'s safe for ball work? Ice or heat? Is swimming okay?" Report sharp pain incidents.' },
-      { time: '6:30-7:00 PM', activity: 'Evening recovery', desc: 'Gentle stretching + foam rolling + ice if needed.' },
-      { time: '9:00 PM', activity: 'Sleep prep', desc: '9+ hours sleep.' }
-    ],
-    thursday: [
-      { time: '6:30-7:00 AM', activity: 'Morning mobility routine', desc: 'Full stretching routine (20 min).' },
-      { time: '8:00-3:00 PM', activity: 'School', desc: 'In-school micro-mobility (5 min, 2-3 times).' },
-      { time: '3:30-4:00 PM', activity: 'Light ball work', desc: 'Stationary technical work (20-25 min).' },
-      { time: '5:00-6:00 PM', activity: 'Coach recovery session', desc: 'Recovery focus with coach.' },
-      { time: '6:30-6:45 PM', activity: 'Electric shock therapy', desc: 'Low intensity, 15 min. Hip flexor or lower back (physio-approved placement and settings only).' },
-      { time: '9:00 PM', activity: 'Sleep prep', desc: '9+ hours sleep.' }
-    ],
-    friday: [
-      { time: '6:30-7:00 AM', activity: 'Morning mobility routine', desc: 'Full stretching routine (20 min).' },
-      { time: '8:00-3:00 PM', activity: 'School', desc: 'In-school micro-mobility (5 min, 2-3 times).' },
-      { time: '3:30-4:00 PM', activity: 'Light ball work', desc: 'Stationary work + light lateral shuffles (NO sprinting). 20-25 min.' },
-      { time: '4:00-4:30 PM', activity: 'Easy walk', desc: 'Flat terrain, 15-30 min, relaxed pace.' },
-      { time: '6:00-6:15 PM', activity: 'Foam rolling session', desc: 'Full foam rolling routine (see Foam Rolling tab). 10-15 min.' },
-      { time: '9:00 PM', activity: 'Sleep prep', desc: '9+ hours sleep.' }
-    ],
-    saturday: [
-      { time: '9:00-9:20 AM', activity: 'Light morning mobility', desc: 'Easy stretching (10 min). No aggressive work.' },
-      { time: '10:00-10:20 AM', activity: 'Easy swimming', desc: 'Freestyle, 15-20 min. Very easy pace.' },
-      { time: '11:00-11:25 AM', activity: 'Light ball work', desc: 'Easy touches, 15 min. Low intensity.' },
-      { time: '2:00-2:15 PM', activity: 'Stretching & foam rolling', desc: 'Focus on hip flexor, hamstrings, lower back, calves.' },
-      { time: '3:00-3:15 PM', activity: 'Ice if needed', desc: 'Apply to right hip/lower back if any swelling or pain.' },
-      { time: 'Evening', activity: 'Rest & recovery', desc: 'Watch  footage, meal prep, relax.' },
-      { time: '9:30 PM', activity: 'Sleep prep', desc: '9+ hours sleep.' }
-    ],
-    sunday: [
-      { time: 'Morning', activity: 'Complete rest', desc: 'Light stretching optional (10 min). No structured training.' },
-      { time: 'Afternoon', activity: 'Meal prep', desc: 'Prepare high-protein meals for the week. Hydrate well (3-4 liters daily).' },
-      { time: 'Afternoon', activity: 'Mental visualization', desc: 'Watch  games. Visualize yourself playing healthy and sharp.' },
-      { time: 'Evening', activity: 'Weekly reflection', desc: 'How does hip/back feel? Any lingering sharp pain? Write notes for physio.' },
-      { time: '9:00 PM', activity: 'Sleep prep', desc: '9+ hours sleep. Reset for new week.' }
+
+const DAYS = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
+const DAY_NAMES = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+
+const EXERCISE_LIBRARY = {
+  mobility: [
+    { name: '90/90 hip stretch', duration: '30 sec each side', category: 'Hips & Hamstrings', desc: 'Sit on floor. Right leg bent in front at 90°, left leg behind at 90°. Keep sit bones on ground. Lean gently forward over right leg. Feel stretch in right glute and hip flexor. Critical for PHT injury recovery.' },
+    { name: 'Pigeon pose / kneeling hip flexor stretch', duration: '30 sec each side', category: 'Hips & Hamstrings', desc: 'From tabletop, bring right knee forward near right wrist. Extend left leg straight back. Square hips, lean forward. Feel deep stretch in right hip and left hip flexor. Hold steady, breathe deeply.' },
+    { name: 'Hip flexor lunge with overhead reach', duration: '5 reps each side', category: 'Hips & Hamstrings', desc: 'Step right foot forward into lunge. Lower back knee to ground. Reach both arms overhead, lean back slightly. Feel stretch in left hip flexor. Return to start. Repeat 5 times each leg.' },
+    { name: 'Dynamic hamstring sweep', duration: '5 each leg', category: 'Hips & Hamstrings', desc: 'Stand tall. Hinge at hips, reach toward toes. As you stand, sweep right leg out to side. Alternate legs. Controlled, dynamic movement. Loosens hamstrings and hips.' },
+    { name: 'Banded dorsiflexion stretch', duration: '30 sec each leg', category: 'Ankles & Calves', desc: 'Loop band around top of right foot, anchor band behind you. Step right foot forward, push knee over toes while keeping heel down. Feel stretch in ankle and calf. Hold 30 sec. Repeat left.' },
+    { name: 'Calf wall stretch', duration: '30 sec each leg', category: 'Ankles & Calves', desc: 'Face wall, hands on wall. Step right foot back, keep heel down, knee straight. Lean forward into wall. Feel stretch in right calf. Hold 30 sec. Repeat left.' },
+    { name: 'Ankle circles', duration: '10 each direction each foot', category: 'Ankles & Calves', desc: 'Sit or stand. Lift right foot off ground. Draw circles with toes—10 clockwise, 10 counterclockwise. Repeat left foot. Improves ankle mobility.' },
+    { name: 'Thoracic rotations (quadruped)', duration: '10 each side', category: 'Thoracic Spine & Upper Back', desc: 'On hands and knees. Place right hand behind head. Rotate torso to right, opening chest toward ceiling. Return to start. 10 reps right, 10 reps left. Improves upper back mobility.' },
+    { name: 'Foam roller T-spine extension', duration: '30 sec', category: 'Thoracic Spine & Upper Back', desc: 'Lie on back, foam roller under shoulder blades. Support head with hands. Arch back over roller. Roll up and down slightly. Extends thoracic spine, improves posture.' },
+    { name: 'Cat-Cow flow', duration: '5 slow reps', category: 'Thoracic Spine & Upper Back', desc: 'On hands and knees. Inhale: arch back, lift head (cow). Exhale: round spine, tuck chin (cat). Move slowly, controlled. Mobilizes entire spine.' },
+    { name: 'Band pull-aparts / face pulls', duration: '15 reps', category: 'Shoulders & Chest', desc: 'Hold resistance band at shoulder height, arms extended. Pull band apart until arms are out to sides, squeeze shoulder blades. Return slowly. 15 reps. Strengthens upper back, improves posture.' },
+    { name: 'Wall slides / shoulder dislocates', duration: '10 reps', category: 'Shoulders & Chest', desc: 'Stand against wall, arms at 90°. Slide arms up overhead, keeping contact with wall. Return slowly. Or use band/towel: hold wide, pass overhead and behind back, return. 10 reps. Shoulder mobility.' },
+    { name: 'Chest opener stretch (doorway)', duration: '30 sec each side', category: 'Shoulders & Chest', desc: 'Stand in doorway. Place right forearm on doorframe, elbow at 90°. Step forward with right foot, feel stretch in chest and front shoulder. Hold 30 sec. Repeat left.' },
+    { name: 'Side plank with reach under', duration: '30 sec each side', category: 'Core & Stability', desc: 'Side plank on right forearm. Extend left arm toward ceiling. Reach left arm under body, rotating torso. Return to start. Repeat for 30 sec. Switch sides. Core stability and rotation.' },
+    { name: 'Pallof press hold', duration: '20–30 sec each side', category: 'Core & Stability', desc: 'Anchor band at chest height to your right. Stand perpendicular, hold band at chest. Press band straight out in front. Hold steady—resist rotation. 20-30 sec. Switch sides. Anti-rotation core strength.' },
+    { name: 'Foam roll IT band', duration: '30–45 sec per leg', category: 'ITB & Lateral Hip', desc: 'Lie on right side, foam roller under right outer thigh (between hip and knee). Use arms to roll up and down slowly. This will be uncomfortable—normal. DON\'T roll too fast. Repeat left side. Reduces hip/knee stress.' },
+    { name: 'Side-lying hip abduction', duration: '12–15 reps each side', category: 'ITB & Lateral Hip', desc: 'Lie on right side. Lift left leg toward ceiling, keep it straight. Lower controlled. 12-15 reps. Switch sides. Strengthens glute medius, stabilizes hips.' },
+    { name: 'Standing ITB/glute stretch', duration: '20–30 sec each side', category: 'ITB & Lateral Hip', desc: 'Stand. Cross right leg behind left. Lean torso to left, reach left arm overhead. Feel stretch in right outer hip/IT band. Hold 20-30 sec. Switch sides.' }
+  ],
+  
+  gym: [
+    { name: 'Back Squat', duration: '5×5', category: 'Legs - Strength', desc: 'Barbell on upper back. Feet shoulder-width. Squat down until thighs parallel (or below). Drive through heels, stand up. Keep chest up, core tight. 5 sets of 5 reps. Builds lower body power.' },
+    { name: 'Trap Bar Deadlift', duration: '5×5', category: 'Legs - Strength', desc: 'Stand inside trap bar. Grip handles, feet hip-width. Hinge at hips, keep back flat. Drive through floor, stand tall. Lower controlled. 5×5. Less stress on lower back than conventional deadlift.' },
+    { name: 'Bulgarian Split Squat', duration: '3×6-8 each leg', category: 'Legs - Strength', desc: 'Rear foot elevated on bench. Front foot forward. Lower back knee toward ground, keep front knee over ankle. Drive through front heel, stand up. 3 sets, 6-8 reps each leg. Single-leg strength.' },
+    { name: 'Single Leg RDL', duration: '3×10 each leg', category: 'Legs - Strength', desc: 'Stand on right leg, hold dumbbell in left hand. Hinge at hip, extend left leg behind for balance. Keep back flat. Feel stretch in right hamstring. Return to standing. 3×10 each leg. Hamstring and balance work.' },
+    { name: 'Broad Jumps / Power Jumps', duration: '5×6', category: 'Legs - Power', desc: 'Stand feet shoulder-width. Swing arms back, explode forward, jump as far as possible. Land softly, absorb with knees. Reset. 5 sets of 6 jumps. Builds explosive power.' },
+    { name: 'Box Jumps / Depth Jumps', duration: '3×8', category: 'Legs - Power', desc: 'Stand facing box. Swing arms, jump onto box. Step down. OR: Step off box, land, immediately jump up. 3 sets of 8 reps. Explosive power.' },
+    { name: 'Skater Jumps', duration: '3×6 each side', category: 'Legs - Power', desc: 'Stand on right leg. Jump laterally to left, land on left leg. Swing right leg behind left for balance. Jump back to right. 3 sets, 6 each side. Lateral power and stability.' },
+    { name: 'Single Leg Square Hops', duration: '3×20 seconds', category: 'Legs - Power', desc: 'Stand on right leg. Imagine a square on ground. Hop forward, right, back, left (making a square). Fast, controlled. 20 sec per leg. 3 sets. Agility and ankle strength.' },
+    { name: 'Sled Push / Sled Sprint', duration: '5×20m', category: 'Legs - Power', desc: 'Load sled with moderate weight. Hands on sled, lean forward, drive legs, push sled 20m. Rest, repeat. 5 sets. Builds power and conditioning.' },
+    { name: 'Resisted Sprint', duration: '4×20 seconds', category: 'Legs - Power', desc: 'Attach resistance band or sled. Sprint against resistance for 20 seconds. Rest. 4 sets. Speed and power under resistance.' },
+    { name: 'Sprints', duration: '5×20m', category: 'Legs - Power', desc: 'Unresisted sprints. Full speed for 20m. Focus on form: drive knees, pump arms. Rest fully between. 5 reps. Speed work.' },
+    { name: 'RDL (Moderate Weight)', duration: '3×12', category: 'Legs - Strength', desc: 'Hold barbell or dumbbells. Hinge at hips, push butt back, lower weight to mid-shin. Keep back flat. Feel hamstrings stretch. Return to standing. 3×12. Hamstring strength.' },
+    { name: 'Lateral Bounds with medicine ball', duration: '3×6–8 each leg', category: 'Legs - Power', desc: 'Hold medicine ball at chest. Stand on right leg. Explode laterally to left, land on left leg. Absorb, stabilize. Repeat back to right. 3 sets, 6-8 each leg. Lateral power.' },
+    { name: 'Calf Raises', duration: '3×20', category: 'Legs - Accessory', desc: 'Stand on edge of step, heels hanging off. Rise up onto toes. Lower heels below step level. 3 sets of 20 reps. Calf strength and ankle stability.' },
+    { name: 'Farmer Carry', duration: '5×40m', category: 'Full Body - Strength', desc: 'Hold heavy dumbbells or kettlebells in each hand. Walk 40m, keep posture upright, core tight. 5 sets. Grip, core, and postural strength.' },
+    
+    { name: 'Bench Press', duration: '5×5', category: 'Upper Body - Strength', desc: 'Lie on bench, barbell above chest. Lower bar to chest with control. Press up explosively. 5 sets of 5 reps. Chest, shoulders, triceps strength.' },
+    { name: 'Incline Bench Press', duration: '3×8', category: 'Upper Body - Strength', desc: 'Bench at 30-45° incline. Barbell or dumbbells. Lower to upper chest, press up. 3×8. Targets upper chest.' },
+    { name: 'Weighted Dips', duration: '4×6–8', category: 'Upper Body - Strength', desc: 'On dip bars, weight belt or dumbbell between feet. Lower body until elbows at 90°. Press back up. 4 sets, 6-8 reps. Chest and triceps.' },
+    { name: 'Tricep Pushdowns', duration: '3×10', category: 'Upper Body - Accessory', desc: 'Cable machine, rope or bar attachment. Elbows at sides, press down until arms straight. Control up. 3×10. Triceps isolation.' },
+    { name: 'Overhead Press', duration: '3×8', category: 'Upper Body - Strength', desc: 'Barbell or dumbbells at shoulder height. Press overhead until arms straight. Lower controlled. 3×8. Shoulder strength.' },
+    { name: 'Chest Flys (cable or machine)', duration: '3×12', category: 'Upper Body - Accessory', desc: 'Cable or machine flys. Arms out to sides, bring together in front of chest. Control back to sides. 3×12. Chest isolation.' },
+    { name: 'Lat Pulldowns', duration: '4×8', category: 'Upper Body - Strength', desc: 'Cable machine, wide grip. Pull bar down to upper chest, squeeze shoulder blades. Control up. 4×8. Back width.' },
+    { name: 'Dumbbell Row', duration: '4×8–10', category: 'Upper Body - Strength', desc: 'One knee and hand on bench. Dumbbell in other hand. Pull dumbbell to hip, squeeze shoulder blade. Lower controlled. 4 sets, 8-10 each arm. Back thickness.' },
+    { name: 'T-bar rows', duration: '4×8-10', category: 'Upper Body - Strength', desc: 'T-bar row setup. Hinge at hips, pull bar to chest, squeeze shoulder blades. Lower controlled. 4×8-10. Mid-back strength.' },
+    { name: 'Face Pulls', duration: '3×12–15', category: 'Upper Body - Accessory', desc: 'Cable at face height, rope attachment. Pull rope toward face, elbows high, separate hands. Squeeze shoulder blades. 3×12-15. Rear delts and upper back.' },
+    { name: 'Cable Rows', duration: '4×10', category: 'Upper Body - Strength', desc: 'Seated cable row. Pull handle to torso, squeeze shoulder blades. Control forward. 4×10. Mid-back.' },
+    
+    { name: 'Hanging Leg Raises', duration: '3×12', category: 'Core', desc: 'Hang from pull-up bar. Raise legs until parallel (or higher). Lower controlled. 3×12. Lower ab strength.' },
+    { name: 'Landmine rotations', duration: '3×5 each side', category: 'Core', desc: 'Barbell in landmine. Hold end with both hands. Rotate torso left and right, moving barbell in arc. 3 sets, 5 each side. Rotational core power.' },
+    { name: 'Russian Twists', duration: '3×20', category: 'Core', desc: 'Sit on ground, knees bent, lean back slightly. Hold weight, twist torso left and right, tapping weight on ground each side. 3×20 total. Obliques.' },
+    { name: 'Side Plank with Hip Drop', duration: '3×12 each side', category: 'Core', desc: 'Side plank position. Lower hip toward ground, raise back up. 3 sets, 12 reps each side. Oblique strength.' },
+    { name: 'Ab Rollouts', duration: '3×12', category: 'Core', desc: 'On knees, hold ab wheel. Roll forward, extending body. Pull back to start with core. 3×12. Full core engagement.' },
+    { name: 'Planks', duration: '3×1 min', category: 'Core', desc: 'Forearms on ground, body straight. Hold position, don\'t let hips sag. 3 sets of 1 minute. Core endurance.' },
+    { name: 'Hanging Knee Raises / Toes-to-Bar', duration: '3×12', category: 'Core', desc: 'Hang from bar. Raise knees to chest OR raise toes to bar. Lower controlled. 3×12. Core and hip flexor strength.' },
+    { name: 'Medicine Ball Rotational Throws', duration: '3×10 each side', category: 'Core', desc: 'Stand sideways to wall, hold medicine ball. Rotate torso, throw ball at wall explosively. Catch, repeat. 3 sets, 10 each side. Rotational power.' }
+  ],
+  
+  football: [
+    { name: 'Juggling variations', duration: '100 juggles', category: 'Warmup', desc: '100 total touches. Mix: both feet, thighs, head. Then: short-short-high pattern. Then freestyle. Improves ball control and first touch.' },
+    { name: 'Cone weave variations', duration: '5-10 reps', category: 'Warmup', desc: 'Set up 5-6 cones in line. Weave through: left foot only, right foot only, both feet, soles only. Increases agility and close control.' },
+    { name: 'Ball mastery circuit', duration: '3-5 min', category: 'Warmup', desc: 'L-drags, V-pulls, box rolls, single leg V-pulls. Quick feet, close control. Warms up feet and improves touch.' },
+    { name: 'Pass off rebounder and turn', duration: '50 reps', category: 'Warmup', desc: 'Pass ball into rebounder, receive on the turn, pass again. 50 total reps. First touch and body positioning.' },
+    { name: 'Speed dribbling (straight)', duration: '8-10 reps', category: 'Warmup / Speed', desc: 'Sprint with ball straight line. Keep ball close but move FAST. 8-10 reps, 20-30m each. Speed with ball at feet.' },
+    { name: 'Zig zag sprint dribbling', duration: '8-10 reps', category: 'Warmup / Speed', desc: 'Sprint with ball, sharp changes of direction. Keep ball close, go fast. 8-10 reps. Agility with ball.' },
+    { name: 'Pings into goal', duration: '25 each leg', category: 'Warmup / Finishing', desc: 'From 18 yards, strike ball cleanly into goal. Focus on technique, not power. 25 reps each foot. Warms up shooting.' },
+    
+    { name: 'Drive at Cone (Steps Overs)', duration: '50 reps', category: '1v1 Skills', desc: 'Dribble at cone as if it\'s a defender. Execute step-overs, accelerate past cone. 50 reps total. Close control and explosive change of pace.' },
+    { name: 'Drive at Cone (Feints)', duration: '50 reps', category: '1v1 Skills', desc: 'Dribble at cone, use body feints (fake left, go right or vice versa), explode past. 50 reps. Deception and acceleration.' },
+    { name: 'Drive at Cone (Combination moves)', duration: '50 reps', category: '1v1 Skills', desc: 'Combine step-overs, feints, cuts. Get creative. 50 reps. Game-realistic scenarios.' },
+    { name: 'Freestyle Dribbling', duration: '5 min (30 sec on, 10 sec off)', category: '1v1 Skills', desc: 'Open space. Dribble creatively—try new moves, change pace, change direction. 30 sec intense, 10 sec rest. Repeat 7-8 rounds. Creativity and flair.' },
+    
+    { name: '20m sprint with ball', duration: '8-10 reps', category: 'Speed / Agility', desc: 'Sprint 20m with ball at feet. Full speed, ball stays close. 8-10 reps. Speed endurance with ball.' },
+    { name: 'Sprint, cut, Sprint', duration: '8-10 reps', category: 'Speed / Agility', desc: 'Sprint 10m, sharp cut left or right, sprint another 10m. With ball. 8-10 reps. Change of direction at speed.' },
+    { name: 'Sprint + Beat defender', duration: '8-10 reps', category: 'Speed / Agility', desc: 'Sprint with ball, imagine defender, execute move (cut, step-over, etc.), accelerate away. 8-10 reps. Game speed dribbling.' },
+    
+    { name: '1 touch passing (alternate)', duration: '150 reps', category: 'Passing', desc: 'Partner or rebounder. Pass with one touch, alternate feet. 150 total touches. Quick decision-making and accuracy.' },
+    { name: '2 touch passing (alternate)', duration: '100 reps', category: 'Passing', desc: 'First touch to control, second touch to pass. Alternate feet. 100 reps. Control and distribution.' },
+    { name: 'Pass, turn, pass', duration: '50 reps', category: 'Passing', desc: 'Receive pass, turn with first touch, pass with second touch. 50 reps. Receiving under pressure and quick distribution.' },
+    { name: 'Dribble to called cone and pass to target', duration: '20-30 reps', category: 'Decision Making', desc: 'Coach calls cone, you dribble to it, pass to target. 20-30 reps. Decision-making under instruction.' },
+    
+    { name: 'Control and Finish (alternate)', duration: '50 reps', category: 'Finishing', desc: 'Receive pass, control, shoot. Alternate feet. 50 reps. First touch into shooting position.' },
+    { name: 'Beat Cone and Finish (left)', duration: '25+ reps', category: 'Finishing', desc: 'Dribble at cone, beat it with move, shoot with left foot. 25+ reps. 1v1 finishing.' },
+    { name: 'Beat Cone and Finish (right)', duration: '25+ reps', category: 'Finishing', desc: 'Same as left, but right foot. 25+ reps.' },
+    { name: 'Weak foot finishing', duration: '20 reps', category: 'Finishing', desc: 'All shots with weak foot. Focus on technique. 20 reps. Weak foot development.' },
+    { name: 'Volleys (alternate)', duration: '20 reps', category: 'Finishing', desc: 'Ball tossed or bounced, volley into goal. Alternate feet. 20 reps. Striking technique.' },
+    { name: 'Cut inside finish (alternate)', duration: '50 reps', category: 'Finishing', desc: 'Dribble wide, cut inside, shoot far post. Alternate sides. 50 reps. Winger\'s bread and butter.' },
+    { name: 'First Time finish (alternate)', duration: '20 reps', category: 'Finishing', desc: 'Ball served, strike first time without controlling. 20 reps. Instinctive finishing.' },
+    { name: 'Precision finishing (corners)', duration: '20-30 reps', category: 'Finishing', desc: 'Aim for small goals in corners of net. Focus on placement over power. 20-30 reps. Accuracy.' },
+    
+    { name: 'First touch callout drill', duration: '20 reps', category: 'First Touch', desc: 'Coach serves ball, calls direction. You take first touch in that direction. 20 reps. Awareness and control.' },
+    { name: 'First touch out of pressure', duration: '20 reps', category: 'First Touch', desc: 'Receive ball with imaginary defender behind you. First touch takes you away from pressure. 20 reps. Escaping tight situations.' },
+    { name: 'First touch to called side', duration: '20 reps', category: 'Decision Making', desc: 'Coach calls left or right, you take first touch to that side. 20 reps. Quick reactions.' },
+    { name: 'First touch under pressure drills', duration: '20 reps', category: 'Decision Making', desc: 'Partner applies light pressure, you receive and protect ball. 20 reps. Composure under pressure.' },
+    { name: 'Scanning first touch drills', duration: '20 reps', category: 'Decision Making', desc: 'Before receiving ball, look around (scan). Receive, make decision based on what you saw. 20 reps. Game awareness.' },
+    
+    { name: 'Ronaldinho Drill', duration: '10-15 min', category: 'Skills / Creativity', desc: 'Cone setup: dribble through, execute moves at each cone. Combine skills fluidly. Famous drill for ball mastery and flair.' }
+  ],
+  
+  recovery: [
+    { name: 'Therabody compression boots', duration: '15-20 min', category: 'Recovery Tools', desc: 'Set to Level 1-2. Sit back, relax. Improves blood flow, reduces inflammation, speeds recovery. Use after training.' },
+    { name: 'Ice therapy (hip/lower back)', duration: '10-15 min', category: 'Recovery Tools', desc: 'Apply ice to injured area. Use towel barrier. Reduces inflammation and pain. Use after activity if swelling/sharp pain present.' },
+    { name: 'Swimming (easy laps)', duration: '15-20 min', category: 'Active Recovery', desc: 'Easy freestyle only (NO butterfly or breaststroke). Focus on form, not speed. Zero impact recovery. Ask physio if safe for your injury.' },
+    { name: 'Easy walking', duration: '15-30 min', category: 'Active Recovery', desc: 'Flat terrain, relaxed pace. Active recovery—keeps blood flowing without stress. Great mental reset.' },
+    { name: 'Foam rolling (calves)', duration: '30-45 sec per leg', category: 'Foam Rolling', desc: 'Sit, roller under calf. Roll from ankle to below knee. Slow, controlled. Stop on tender spots for 10 sec. Reduces tightness.' },
+    { name: 'Foam rolling (quads)', duration: '30-45 sec per leg', category: 'Foam Rolling', desc: 'Lie face down, roller under thigh. Roll from hip to above knee. Avoid rolling directly on hip flexor (too sensitive with PHT injury). Moderate pressure.' },
+    { name: 'Foam rolling (IT band)', duration: '30-45 sec per leg', category: 'Foam Rolling', desc: 'Lie on side, roller under outer thigh. Roll between hip and knee. This will be uncomfortable—normal. Don\'t roll too fast. Reduces hip/knee stress.' },
+    { name: 'Foam rolling (glutes)', duration: '30-45 sec per side', category: 'Foam Rolling', desc: 'Sit on roller, cross right ankle over left knee. Lean toward right glute. Roll in small circles. Find tender spots, hold 10 sec. Releases tension.' },
+    { name: 'Foam rolling (upper back)', duration: '45 sec', category: 'Foam Rolling', desc: 'Lie on back, roller under shoulder blades. Support head with hands. Roll from mid-back to shoulders. DON\'T roll lower back. Improves posture.' }
+  ]
+};
+
+const TRAINING_SCHEDULES = {
+  monday: {
+    mode: 'training',
+    schedule: [
+      { time: '6:30-7:30 AM', activity: 'Gym - Legs & Power', desc: 'Back Squat 5×5, Broad Jumps 5×6, Bulgarian Split Squat 3×6-8, Skater Jumps 3×6, Single Leg Square Hops 3×20s, Single Leg RDL 3×10, Calf Raises 3×20, Hanging Leg Raises 3×12, Landmine 3×5 each side' },
+      { time: '8:00-3:00 PM', activity: 'School', desc: 'Light mobility between classes if possible' },
+      { time: '4:00-4:30 PM', activity: 'Football Warmup', desc: 'Dynamic warmup, juggling (100), cone weaves, ball mastery, rebounder passes (50), speed dribbling, pings (25 each leg)' },
+      { time: '4:30-5:30 PM', activity: 'Football Training - 1v1 & Finishing', desc: '1v1 Drills: Drive at cone—step-overs, feints, combinations (50 reps). Freestyle dribbling 5 min (30s on/10s off). Sprint drills: 20m sprint with ball, sprint/cut/sprint, beat defender (8-10 each). Finishing: Beat cone and finish left/right (25+ each), weak foot (20)' },
+      { time: '6:00-6:30 PM', activity: 'Recovery & Meal', desc: 'Stretch, foam roll if needed. High-protein meal. Hydrate.' },
+      { time: '9:30 PM', activity: 'Sleep', desc: 'Aim for 8-9 hours' }
     ]
   },
-  return: {
-    monday: [
-      { time: '6:30-7:00 AM', activity: 'Morning mobility routine', desc: 'Full stretching routine (20 min).' },
-      { time: '8:00-3:00 PM', activity: 'School', desc: 'In-school micro-mobility (5 min, 2-3 times).' },
-      { time: '3:30-3:40 PM', activity: 'Light jogging warm-up', desc: '10 min easy jog. Conversational pace. STOP if sharp pain.' },
-      { time: '3:40-4:05 PM', activity: 'Ball work + passing drills', desc: '25 min. Increased intensity but still controlled.' },
-      { time: '4:05-4:20 PM', activity: 'Recovery walk & stretch', desc: '15 min cool-down walk + stretching.' },
-      { time: '9:00 PM', activity: 'Sleep prep', desc: '8-9 hours sleep.' }
-    ],
-    tuesday: [
-      { time: '6:30-7:00 AM', activity: 'Morning mobility', desc: 'Full routine (20 min).' },
-      { time: '8:00-3:00 PM', activity: 'School', desc: 'Micro-mobility between classes.' },
-      { time: '5:00-6:00 PM', activity: 'Coach session', desc: 'Training focus.' },
-      { time: '6:00-6:20 PM', activity: 'Light ball work', desc: '20 min technical work after coach session.' },
-      { time: '6:30-6:45 PM', activity: 'Therabody boots', desc: '15 min recovery.' },
-      { time: '9:00 PM', activity: 'Sleep', desc: '8-9 hours.' }
-    ],
-    wednesday: [
-      { time: '6:30-7:00 AM', activity: 'Morning mobility', desc: 'Full routine.' },
-      { time: '8:00-3:00 PM', activity: 'School', desc: 'Micro-mobility.' },
-      { time: '3:30-3:50 PM', activity: 'Easy swimming', desc: '20 min freestyle.' },
-      { time: '4:00-4:30 PM', activity: 'Light jogging + ball work', desc: '30 min combined session.' },
-      { time: '6:00-6:15 PM', activity: 'Stretching', desc: '15 min focus on hip/back.' },
-      { time: '9:00 PM', activity: 'Sleep', desc: '8-9 hours.' }
-    ],
-    thursday: [
-      { time: '6:30-6:45 AM', activity: 'Morning mobility', desc: '15 min (slightly reduced).' },
-      { time: '8:00-3:00 PM', activity: 'School', desc: 'Micro-mobility.' },
-      { time: '5:00-6:00 PM', activity: 'Coach session', desc: 'Training work.' },
-      { time: '6:00-6:25 PM', activity: 'Light training session', desc: '25 min.' },
-      { time: '6:30-6:45 PM', activity: 'Electric shock therapy', desc: '15 min (if still needed).' },
-      { time: '9:00 PM', activity: 'Sleep', desc: '8-9 hours.' }
-    ],
-    friday: [
-      { time: '6:30-6:45 AM', activity: 'Morning mobility', desc: '15 min.' },
-      { time: '8:00-3:00 PM', activity: 'School', desc: 'Micro-mobility.' },
-      { time: '3:30-4:05 PM', activity: 'Light-medium intensity session', desc: '35 min. Gradual progression.' },
-      { time: '4:05-4:20 PM', activity: 'Recovery walk & stretch', desc: '15 min cool-down.' },
-      { time: '9:00 PM', activity: 'Sleep', desc: '8-9 hours.' }
-    ],
-    saturday: [
-      { time: '9:00-9:20 AM', activity: 'Optional light training', desc: '20 min if feeling good.' },
-      { time: '10:00-10:20 AM', activity: 'Easy swimming', desc: '20 min recovery swim.' },
-      { time: '11:00-11:15 AM', activity: 'Stretching & mobility', desc: '15 min.' },
-      { time: 'Afternoon', activity: 'Active recovery', desc: 'Walk, light activities.' },
-      { time: '9:00 PM', activity: 'Sleep', desc: '8-9 hours.' }
-    ],
-    sunday: [
-      { time: 'Morning', activity: 'Rest or light walk', desc: 'Complete rest preferred.' },
-      { time: 'Afternoon', activity: 'Meal prep', desc: 'Prepare meals for training week.' },
-      { time: 'Afternoon', activity: 'Mental prep', desc: 'Visualize match scenarios.' },
-      { time: '9:00 PM', activity: 'Sleep', desc: '8-9 hours. Ready for training week.' }
+  
+  tuesday: {
+    mode: 'training',
+    schedule: [
+      { time: '6:30-7:30 AM', activity: 'Gym - Upper Body Push', desc: 'Bench Press 5×5, Incline Bench 3×8, Weighted Dips 4×6-8, Tricep Pushdowns 3×10, Overhead Press 3×8, Chest Flys 3×12, Pallof Press 3×12 each side, Side Plank Hip Drop 3×12, Ab Rollouts 3×12' },
+      { time: '8:00-3:00 PM', activity: 'School', desc: 'Light mobility between classes' },
+      { time: '4:00-4:30 PM', activity: 'Football Warmup', desc: 'Full warmup routine' },
+      { time: '4:30-5:30 PM', activity: 'Football Training - Passing & Finishing', desc: 'Passing: 1 touch (alternate 150), 2 touch (alternate 100), pass/turn/pass (50). Decision making: Dribble to called cone and pass. Finishing: Control and finish (alternate 50), weak foot (20)' },
+      { time: '6:00-6:30 PM', activity: 'Recovery & Meal', desc: 'Stretch, foam roll. High-protein meal.' },
+      { time: '9:30 PM', activity: 'Sleep', desc: '8-9 hours' }
+    ]
+  },
+  
+  wednesday: {
+    mode: 'training',
+    schedule: [
+      { time: '6:30-7:30 AM', activity: 'Gym - Power & Speed', desc: 'Trap Bar Deadlift 5×5, Sled Push 5×20m, Resisted Sprint 4×20s, Sprints 5×20m, RDL 3×12, Lateral Bounds 3×6-8, Planks 3×1min, Hanging Knee Raises 3×12, Med Ball Rotational Throws 3×10 each' },
+      { time: '8:00-3:00 PM', activity: 'School', desc: 'Physio 5-6 PM (if applicable)' },
+      { time: '4:00-4:30 PM', activity: 'Football Warmup', desc: 'Full warmup' },
+      { time: '4:30-5:30 PM', activity: 'Football Training - 1v1 & Advanced Finishing', desc: '1v1 drills (50 reps), Freestyle dribbling 5 min, First touch drills: callout (20), out of pressure (20). Finishing: Volleys (20), cut inside (50), first time (20), precision corners, weak foot (20)' },
+      { time: '6:00-6:30 PM', activity: 'Recovery & Meal', desc: 'Stretch, foam roll. Meal.' },
+      { time: '9:30 PM', activity: 'Sleep', desc: '8-9 hours' }
+    ]
+  },
+  
+  thursday: {
+    mode: 'training',
+    schedule: [
+      { time: '6:30-7:30 AM', activity: 'Gym - Upper Body Pull', desc: 'Lat Pulldowns 4×8, Dumbbell Row 4×8-10, T-bar rows 4×8-10, Face Pulls 3×12-15, Pallof Press 3×12 each, Cable Rows 4×10, Russian Twists 3×20, Side Plank Reach Under 3×12 each' },
+      { time: '8:00-3:00 PM', activity: 'School', desc: 'Light mobility' },
+      { time: '4:00-4:30 PM', activity: 'Football Warmup', desc: 'Full warmup' },
+      { time: '4:30-5:30 PM', activity: 'Football Training - Speed & Finishing', desc: 'Sprint drills: 20m sprint with ball, sprint/cut/sprint, beat defender (8-10 each). Passing: 1 touch (150), 2 touch (100), pass/turn/pass (50). Finishing: Volleys (20), cut inside (50), weak foot (20)' },
+      { time: '6:00-6:30 PM', activity: 'Recovery & Meal', desc: 'Stretch, foam roll. Meal.' },
+      { time: '9:30 PM', activity: 'Sleep', desc: '8-9 hours' }
+    ]
+  },
+  
+  friday: {
+    mode: 'training',
+    schedule: [
+      { time: '6:30-7:30 AM', activity: 'Gym - Legs & Core', desc: 'Back Squat 5×5, Box Jumps 3×8, Single-Leg RDL 3×10 each, Farmer Carry 5×40m, Ab Wheel Rollouts 3×12, Hanging leg raise 3×8-10, Planks 3×1min' },
+      { time: '8:00-3:00 PM', activity: 'School', desc: 'Light mobility' },
+      { time: '4:00-4:30 PM', activity: 'Football Warmup', desc: 'Full warmup' },
+      { time: '4:30-5:30 PM', activity: 'Football Training - Decision Making & Finishing', desc: '1v1 drills (50), Freestyle dribbling 5 min, Decision making: First touch to called side, under pressure, scanning drills. Finishing: Cut inside (50), first time (20), weak foot (20)' },
+      { time: '6:00-6:30 PM', activity: 'Recovery & Meal', desc: 'Stretch, foam roll. Meal.' },
+      { time: '9:30 PM', activity: 'Sleep', desc: '8-9 hours' }
+    ]
+  },
+  
+  saturday: {
+    mode: 'training',
+    schedule: [
+      { time: '9:00-9:30 AM', activity: 'Mobility Session', desc: 'Full mobility routine from Exercise Guide' },
+      { time: '10:00-10:30 AM', activity: 'Football Warmup', desc: 'Full warmup' },
+      { time: '10:30-11:30 AM', activity: 'Football Training - Speed & Finishing', desc: 'Sprint drills: 20m sprint with ball, sprint/cut/sprint, beat defender (8-10 each). Finishing: Cut inside (50), weak foot (20), volleys (20), first time (20)' },
+      { time: '12:00-12:30 PM', activity: 'Recovery', desc: 'Stretch, foam roll, hydrate, meal' },
+      { time: 'Afternoon', activity: 'Rest & Mental Prep', desc: 'Watch match footage, visualization' },
+      { time: '9:30 PM', activity: 'Sleep', desc: '8-9 hours' }
+    ]
+  },
+  
+  sunday: {
+    mode: 'training',
+    schedule: [
+      { time: '9:00-9:30 AM', activity: 'Mobility Session', desc: 'Full mobility routine' },
+      { time: '4:00-4:30 PM', activity: 'Football Warmup', desc: 'Light warmup session. Optional if feeling fatigued.' },
+      { time: 'Afternoon', activity: 'Meal Prep & Planning', desc: 'Prepare meals for week. Plan recovery days for next week.' },
+      { time: 'Evening', activity: 'Rest & Visualization', desc: 'Mental prep, watch football, relax' },
+      { time: '9:00 PM', activity: 'Sleep', desc: '8-9 hours to reset for training week' }
     ]
   }
 };
- 
+
+const RECOVERY_SCHEDULE = {
+  template: [
+    { time: '6:30-7:00 AM', activity: 'Morning mobility routine', desc: 'Full stretching and mobility from Exercise Guide (20-30 min)' },
+    { time: '8:00-3:00 PM', activity: 'School', desc: 'Light micro-mobility between classes: 90/90 hip stretch, quad stretch, ankle circles (5 min, 2-3 times)' },
+    { time: '3:30-4:00 PM', activity: 'Light technical ball work (optional)', desc: 'Stationary first touch, passing with partner. NO running, NO directional changes. Keep it light.' },
+    { time: '4:00-5:00 PM', activity: 'Recovery session', desc: 'Choose 2-3: Easy swimming (15-20 min), Therabody boots (15 min), Foam rolling (10-15 min), Easy walk (20-30 min)' },
+    { time: '6:00-6:30 PM', activity: 'Evening stretching', desc: 'Gentle stretching routine. Focus on hip flexor, hamstrings, lower back' },
+    { time: 'Evening', activity: 'Meal & Hydration', desc: 'High-protein meal (120-140g protein daily). 3-4 liters water. Anti-inflammatory foods.' },
+    { time: '9:00 PM', activity: 'Sleep', desc: '9+ hours for recovery' }
+  ]
+};
+
 let state = {
-  phase: 'recovery',
-  customExercises: { stretch: [], foam: [], recovery: [] },
+  weekPlan: {
+    sunday: 'recovery',
+    monday: 'training',
+    tuesday: 'training',
+    wednesday: 'training',
+    thursday: 'training',
+    friday: 'training',
+    saturday: 'training'
+  },
   weeklyChecks: {},
   lastReset: new Date().toDateString()
 };
- 
-let currentExerciseType = '';
- 
+
 function loadState() {
-  const saved = localStorage.getItem('RecoveryState');
+  const saved = localStorage.getItem('recvr.TrainingState');
   if (saved) {
     state = JSON.parse(saved);
   }
 }
- 
+
 function saveState() {
-  localStorage.setItem('RecoveryState', JSON.stringify(state));
+  localStorage.setItem('recvr.TrainingState', JSON.stringify(state));
 }
- 
+
 function getDayOfWeek() {
   return new Date().getDay();
 }
- 
+
 function getBibleVerse() {
   return BIBLE_VERSES[getDayOfWeek()];
 }
- 
+
 function getCurrentDay() {
-  const days = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
-  return days[new Date().getDay()];
+  return DAYS[getDayOfWeek()];
 }
- 
+
+function getTodayMode() {
+  const day = getCurrentDay();
+  return state.weekPlan[day];
+}
+
 function switchTab(tab) {
   document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
   document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
@@ -728,121 +891,230 @@ function switchTab(tab) {
   event.target.classList.add('active');
   document.getElementById(tab).classList.add('active');
   
-  if (tab === 'daily') renderDailySchedule();
-  if (tab === 'stretching') renderStretching();
-  if (tab === 'foam') renderFoamRolling();
-  if (tab === 'recovery') renderRecoveryTools();
-  if (tab === 'tracker') renderWeeklyTracker();
+  if (tab === 'daily') renderDaily();
+  if (tab === 'planner') renderPlanner();
+  if (tab === 'exercises') renderExercises();
+  if (tab === 'tracker') renderTracker();
 }
- 
-function renderDailySchedule() {
+
+function renderDaily() {
   const day = getCurrentDay();
-  const schedule = DAILY_SCHEDULES[state.phase][day];
+  const mode = state.weekPlan[day];
+  
+  // Update mode badge
+  const badge = document.getElementById('modeBadge');
+  badge.textContent = mode === 'recovery' ? '🛡️ Recovery Mode' : '⚡ Training Mode';
+  badge.className = 'mode-badge ' + mode;
+  
+  // Render weekly overview
+  renderWeeklyOverview();
+  
+  // Render today's schedule
   const container = document.getElementById('dailySchedule');
+  const title = document.getElementById('dailyTitle');
+  title.textContent = `${DAY_NAMES[getDayOfWeek()]}'s Schedule`;
   
-  const phaseIndicator = document.getElementById('phaseIndicator');
-  phaseIndicator.textContent = state.phase === 'recovery' ? 'Recovery week' : 'Return to training';
-  phaseIndicator.className = `phase-indicator phase-${state.phase}`;
-  
-  container.innerHTML = schedule.map(item => `
-    <div class="schedule-item">
-      <div class="schedule-time">${item.time}</div>
-      <div class="schedule-activity">${item.activity}</div>
-      <div class="schedule-desc">${item.desc}</div>
-    </div>
-  `).join('');
-}
- 
-function renderStretching() {
-  const allStretches = [...STRETCHES, ...state.customExercises.stretch];
-  const container = document.getElementById('stretchList');
-  
-  container.innerHTML = allStretches.map((ex, i) => `
-    <div class="exercise-item">
-      <div class="exercise-header">
-        <div class="exercise-name">${ex.name}</div>
-        <div class="exercise-duration">${ex.duration}</div>
+  if (mode === 'recovery') {
+    container.innerHTML = RECOVERY_SCHEDULE.template.map(item => `
+      <div class="schedule-item recovery-item">
+        <div class="schedule-time">${item.time}</div>
+        <div class="schedule-activity">${item.activity}</div>
+        <div class="schedule-desc">${item.desc}</div>
       </div>
-      <div class="exercise-desc">${ex.desc}</div>
-      ${i >= STRETCHES.length ? `<button class="btn btn-danger" style="margin-top: 8px;" onclick="deleteCustomExercise('stretch', ${i - STRETCHES.length})">Delete</button>` : ''}
-    </div>
-  `).join('');
-}
- 
-function renderFoamRolling() {
-  const allFoam = [...FOAM_ROLLING, ...state.customExercises.foam];
-  const container = document.getElementById('foamList');
-  
-  container.innerHTML = allFoam.map((ex, i) => `
-    <div class="exercise-item">
-      <div class="exercise-header">
-        <div class="exercise-name">${ex.name}</div>
-        <div class="exercise-duration">${ex.duration}</div>
+    `).join('');
+  } else {
+    const schedule = TRAINING_SCHEDULES[day].schedule;
+    container.innerHTML = schedule.map(item => `
+      <div class="schedule-item">
+        <div class="schedule-time">${item.time}</div>
+        <div class="schedule-activity">${item.activity}</div>
+        <div class="schedule-desc">${item.desc}</div>
       </div>
-      <div class="exercise-desc">${ex.desc}</div>
-      ${i >= FOAM_ROLLING.length ? `<button class="btn btn-danger" style="margin-top: 8px;" onclick="deleteCustomExercise('foam', ${i - FOAM_ROLLING.length})">Delete</button>` : ''}
-    </div>
-  `).join('');
+    `).join('');
+  }
 }
- 
-function renderRecoveryTools() {
-  const allRecovery = [...RECOVERY_TOOLS, ...state.customExercises.recovery];
-  const container = document.getElementById('recoveryList');
+
+function renderWeeklyOverview() {
+  const container = document.getElementById('weeklyOverview');
+  const today = getDayOfWeek();
   
-  container.innerHTML = allRecovery.map((ex, i) => `
-    <div class="exercise-item">
-      <div class="exercise-header">
-        <div class="exercise-name">${ex.name}</div>
-        <div class="exercise-duration">${ex.duration}</div>
+  container.innerHTML = DAYS.map((day, i) => {
+    const mode = state.weekPlan[day];
+    const isToday = i === today;
+    return `
+      <div class="week-day-card ${mode} ${isToday ? 'active' : ''}" onclick="viewDay(${i})">
+        <div class="week-day-name">${DAY_NAMES[i]}</div>
+        <div class="week-day-type ${mode}">${mode === 'recovery' ? '🛡️ Recovery' : '⚡ Training'}</div>
       </div>
-      <div class="exercise-desc">${ex.desc}</div>
-      ${i >= RECOVERY_TOOLS.length ? `<button class="btn btn-danger" style="margin-top: 8px;" onclick="deleteCustomExercise('recovery', ${i - RECOVERY_TOOLS.length})">Delete</button>` : ''}
-    </div>
-  `).join('');
+    `;
+  }).join('');
 }
- 
-function renderWeeklyTracker() {
-  const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+
+function viewDay(dayIndex) {
+  // Scroll to daily schedule and highlight that day
+  const day = DAYS[dayIndex];
+  const mode = state.weekPlan[day];
+  
+  document.getElementById('dailyTitle').textContent = `${DAY_NAMES[dayIndex]}'s Schedule`;
+  
+  const container = document.getElementById('dailySchedule');
+  if (mode === 'recovery') {
+    container.innerHTML = RECOVERY_SCHEDULE.template.map(item => `
+      <div class="schedule-item recovery-item">
+        <div class="schedule-time">${item.time}</div>
+        <div class="schedule-activity">${item.activity}</div>
+        <div class="schedule-desc">${item.desc}</div>
+      </div>
+    `).join('');
+  } else {
+    const schedule = TRAINING_SCHEDULES[day].schedule;
+    container.innerHTML = schedule.map(item => `
+      <div class="schedule-item">
+        <div class="schedule-time">${item.time}</div>
+        <div class="schedule-activity">${item.activity}</div>
+        <div class="schedule-desc">${item.desc}</div>
+      </div>
+    `).join('');
+  }
+  
+  renderWeeklyOverview();
+}
+
+function renderPlanner() {
+  const container = document.getElementById('weekPlannerSelector');
+  
+  container.innerHTML = DAYS.map((day, i) => {
+    const mode = state.weekPlan[day];
+    return `
+      <div class="day-selector ${mode}" onclick="toggleDayMode('${day}')">
+        <div class="day-name">${DAY_NAMES[i]}</div>
+        <div class="day-mode">${mode === 'recovery' ? '🛡️ Recovery' : '⚡ Training'}</div>
+      </div>
+    `;
+  }).join('');
+}
+
+function toggleDayMode(day) {
+  state.weekPlan[day] = state.weekPlan[day] === 'recovery' ? 'training' : 'recovery';
+  renderPlanner();
+}
+
+function saveWeekPlan() {
+  saveState();
+  alert('✅ Week plan saved! Your schedule is updated.');
+  renderDaily();
+}
+
+function renderExercises() {
+  const container = document.getElementById('exerciseList');
+  let html = '';
+  
+  // Mobility exercises
+  html += '<div class="exercise-category">🧘 Mobility & Stretching</div>';
+  EXERCISE_LIBRARY.mobility.forEach(ex => {
+    html += `
+      <div class="exercise-item">
+        <div class="exercise-header">
+          <div class="exercise-name">${ex.name}</div>
+          <div class="exercise-duration">${ex.duration}</div>
+        </div>
+        <div class="exercise-desc"><strong>${ex.category}:</strong> ${ex.desc}</div>
+      </div>
+    `;
+  });
+  
+  // Gym exercises
+  html += '<div class="exercise-category">💪 Gym Exercises</div>';
+  EXERCISE_LIBRARY.gym.forEach(ex => {
+    html += `
+      <div class="exercise-item">
+        <div class="exercise-header">
+          <div class="exercise-name">${ex.name}</div>
+          <div class="exercise-duration">${ex.duration}</div>
+        </div>
+        <div class="exercise-desc"><strong>${ex.category}:</strong> ${ex.desc}</div>
+      </div>
+    `;
+  });
+  
+  // Football drills
+  html += '<div class="exercise-category">⚽ Football Drills</div>';
+  EXERCISE_LIBRARY.football.forEach(ex => {
+    html += `
+      <div class="exercise-item">
+        <div class="exercise-header">
+          <div class="exercise-name">${ex.name}</div>
+          <div class="exercise-duration">${ex.duration}</div>
+        </div>
+        <div class="exercise-desc"><strong>${ex.category}:</strong> ${ex.desc}</div>
+      </div>
+    `;
+  });
+  
+  // Recovery tools
+  html += '<div class="exercise-category">🛡️ Recovery Tools</div>';
+  EXERCISE_LIBRARY.recovery.forEach(ex => {
+    html += `
+      <div class="exercise-item">
+        <div class="exercise-header">
+          <div class="exercise-name">${ex.name}</div>
+          <div class="exercise-duration">${ex.duration}</div>
+        </div>
+        <div class="exercise-desc"><strong>${ex.category}:</strong> ${ex.desc}</div>
+      </div>
+    `;
+  });
+  
+  container.innerHTML = html;
+}
+
+function filterExercises() {
+  const search = document.getElementById('exerciseSearch').value.toLowerCase();
+  const items = document.querySelectorAll('.exercise-item');
+  
+  items.forEach(item => {
+    const text = item.textContent.toLowerCase();
+    item.style.display = text.includes(search) ? 'block' : 'none';
+  });
+}
+
+function renderTracker() {
   const container = document.getElementById('weeklyChecklist');
+  let html = '';
   
-  const tasks = {
-    recovery: {
-      Monday: ['Morning mobility', 'School micro-mobility', 'Light ball work', 'Evening recovery', 'Sleep 9+ hours'],
-      Tuesday: ['Morning mobility', 'School micro-mobility', 'Light ball work', 'Coach session', 'Therabody boots', 'Sleep 9+ hours'],
-      Wednesday: ['Morning mobility', 'School micro-mobility', 'Easy swimming', 'Physio session', 'Evening recovery', 'Sleep 9+ hours'],
-      Thursday: ['Morning mobility', 'School micro-mobility', 'Light ball work', 'Coach session', 'Electric shock therapy', 'Sleep 9+ hours'],
-      Friday: ['Morning mobility', 'School micro-mobility', 'Light ball work', 'Easy walk', 'Foam rolling', 'Sleep 9+ hours'],
-      Saturday: ['Light mobility', 'Easy swimming', 'Light ball work', 'Stretching', 'Ice if needed', 'Sleep 9+ hours'],
-      Sunday: ['Rest day', 'Meal prep', 'Visualization', 'Sleep 9+ hours']
-    },
-    return: {
-      Monday: ['Morning mobility', 'School micro-mobility', 'Light jog warm-up', 'Ball work', 'Recovery walk', 'Sleep 8-9 hours'],
-      Tuesday: ['Morning mobility', 'School micro-mobility', 'Coach session', 'Light ball work', 'Therabody boots', 'Sleep 8-9 hours'],
-      Wednesday: ['Morning mobility', 'School micro-mobility', 'Easy swimming', 'Light jogging + ball work', 'Stretching', 'Sleep 8-9 hours'],
-      Thursday: ['Morning mobility', 'School micro-mobility', 'Coach session', 'Light training', 'Electric shock therapy', 'Sleep 8-9 hours'],
-      Friday: ['Morning mobility', 'School micro-mobility', 'Light-medium session', 'Recovery walk', 'Sleep 8-9 hours'],
-      Saturday: ['Optional training', 'Easy swimming', 'Stretching', 'Sleep 8-9 hours'],
-      Sunday: ['Rest day', 'Meal prep', 'Visualization', 'Sleep 8-9 hours']
-    }
-  };
-  
-  const currentTasks = tasks[state.phase];
   let totalTasks = 0;
   let completedTasks = 0;
   let completedDays = 0;
   
-  container.innerHTML = days.map(day => {
-    const dayTasks = currentTasks[day];
-    totalTasks += dayTasks.length;
-    let dayCompleted = 0;
+  DAYS.forEach((day, dayIndex) => {
+    const mode = state.weekPlan[day];
+    const dayName = DAY_NAMES[dayIndex];
     
-    const taskHtml = dayTasks.map((task, i) => {
+    let tasks = [];
+    if (mode === 'recovery') {
+      tasks = [
+        'Morning mobility (20-30 min)',
+        'School micro-mobility (2-3 times)',
+        'Light technical ball work (optional)',
+        'Recovery session (choose 2-3 tools)',
+        'Evening stretching',
+        'High-protein meal + hydration',
+        'Sleep 9+ hours'
+      ];
+    } else {
+      const schedule = TRAINING_SCHEDULES[day].schedule;
+      tasks = schedule.map(s => s.activity);
+    }
+    
+    let dayCompleted = 0;
+    const taskHtml = tasks.map((task, i) => {
       const key = `${day}-${i}`;
       const checked = state.weeklyChecks[key] || false;
       if (checked) {
         completedTasks++;
         dayCompleted++;
       }
+      totalTasks++;
       
       return `
         <div class="checklist-item ${checked ? 'checked' : ''}">
@@ -852,100 +1124,50 @@ function renderWeeklyTracker() {
       `;
     }).join('');
     
-    if (dayCompleted === dayTasks.length) completedDays++;
+    if (dayCompleted === tasks.length) completedDays++;
     
-    return `
+    html += `
       <div class="card">
-        <h2>${day} <span style="font-size: 14px; color: #999; font-weight: normal;">(${dayCompleted}/${dayTasks.length})</span></h2>
-        <div class="checklist">${taskHtml}</div>
+        <h2>${dayName} <span style="font-size: 14px; color: var(--text-secondary); font-weight: normal;">(${dayCompleted}/${tasks.length})</span></h2>
+        ${taskHtml}
       </div>
     `;
-  }).join('');
+  });
+  
+  container.innerHTML = html;
   
   const progress = totalTasks > 0 ? Math.round((completedTasks / totalTasks) * 100) : 0;
   document.getElementById('weekProgress').textContent = `${progress}%`;
   document.getElementById('tasksDone').textContent = `${completedTasks}/${totalTasks}`;
   document.getElementById('daysComplete').textContent = `${completedDays}/7`;
 }
- 
+
 function toggleTask(key) {
   state.weeklyChecks[key] = !state.weeklyChecks[key];
   saveState();
-  renderWeeklyTracker();
+  renderTracker();
 }
- 
-function changePhase(phase) {
-  state.phase = phase;
-  saveState();
-  renderDailySchedule();
-  renderWeeklyTracker();
-}
- 
+
 function resetWeek() {
-  if (confirm('Reset all checkboxes for a new week?')) {
+  if (confirm('🔄 Reset all checkboxes for a new week?')) {
     state.weeklyChecks = {};
     state.lastReset = new Date().toDateString();
     saveState();
-    renderWeeklyTracker();
+    renderTracker();
   }
 }
- 
-function openAddExercise(type) {
-  currentExerciseType = type;
-  const titles = { stretch: 'Add custom stretch', foam: 'Add custom foam rolling area', recovery: 'Add custom recovery tool' };
-  document.getElementById('modalTitle').textContent = titles[type];
-  document.getElementById('exerciseName').value = '';
-  document.getElementById('exerciseDuration').value = '';
-  document.getElementById('exerciseDesc').value = '';
-  document.getElementById('addExerciseModal').classList.add('active');
-}
- 
-function closeAddExercise() {
-  document.getElementById('addExerciseModal').classList.remove('active');
-}
- 
-function saveCustomExercise() {
-  const name = document.getElementById('exerciseName').value.trim();
-  const duration = document.getElementById('exerciseDuration').value.trim();
-  const desc = document.getElementById('exerciseDesc').value.trim();
-  
-  if (!name || !duration || !desc) {
-    alert('Please fill in all fields');
-    return;
-  }
-  
-  state.customExercises[currentExerciseType].push({ name, duration, desc });
-  saveState();
-  closeAddExercise();
-  
-  if (currentExerciseType === 'stretch') renderStretching();
-  if (currentExerciseType === 'foam') renderFoamRolling();
-  if (currentExerciseType === 'recovery') renderRecoveryTools();
-}
- 
-function deleteCustomExercise(type, index) {
-  if (confirm('Delete this exercise?')) {
-    state.customExercises[type].splice(index, 1);
-    saveState();
-    
-    if (type === 'stretch') renderStretching();
-    if (type === 'foam') renderFoamRolling();
-    if (type === 'recovery') renderRecoveryTools();
-  }
-}
- 
+
 function init() {
   loadState();
   document.getElementById('bibleVerse').textContent = getBibleVerse();
-  renderDailySchedule();
-  renderStretching();
-  renderFoamRolling();
-  renderRecoveryTools();
-  renderWeeklyTracker();
+  renderDaily();
+  renderPlanner();
+  renderExercises();
+  renderTracker();
 }
- 
+
 init();
 </script>
- 
+
 </body>
 </html>
